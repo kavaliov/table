@@ -1,0 +1,14 @@
+.col {
+  border: 1px solid #ccc;
+  border-right: 0;
+  border-bottom: 0;
+  padding: 4px;
+  white-space: nowrap;
+  box-sizing: border-box;
+  line-height: 1em;
+  text-align: center;
+}
+
+.selected {
+  background: aliceblue;
+}

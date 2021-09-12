@@ -1,0 +1,25 @@
+* {
+  padding: 0;
+  margin: 0;
+  font-family: monospace;
+}
+
+.wrapper {
+  width: 700px;
+  margin: 30px auto;
+  position: relative;
+
+  .table {
+    width: 100%;
+    -webkit-touch-callout: none;
+    user-select: none;
+    user-drag: none;
+    border-collapse: separate;
+    white-space: nowrap;
+    empty-cells: show;
+    background-color: #fff;
+    border-spacing: 0;
+    border-right: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+  }
+}
