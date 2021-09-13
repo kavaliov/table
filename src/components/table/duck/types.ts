@@ -8,6 +8,7 @@ export interface SketchContext {
 }
 
 export interface TableState {
+  editableCol: number;
   touched: boolean;
   selectionState: SelectionStateType;
   rows: RowType[];
@@ -26,14 +27,27 @@ export interface PositionStateType {
 
 export interface RowType {
   id: number;
-  height: number;
+  height?: number;
   cols: ColType[];
 }
 
 export interface ColType {
   id: number;
   type: string;
+  display: boolean;
   content: string;
+  background?: string;
   rowSpan?: number;
   colSpan?: number;
+}
+
+export interface RangeType {
+  row: {
+    min: number;
+    max: number;
+  };
+  col: {
+    min: number;
+    max: number;
+  };
 }

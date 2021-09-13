@@ -1,0 +1,15 @@
+.wrapper {
+  z-index: 10;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid #258cff;
+  border-radius: 0;
+  -webkit-appearance: none;
+  outline: none;
+  padding: 0 8px;
+  text-align: center;
+}

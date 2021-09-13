@@ -22,7 +22,6 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
       ...state,
       selectionState: {
         ...state.selectionState,
-        selected: true,
         end: positionEnd,
       },
     })
@@ -31,11 +30,58 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
     ...state,
     touched,
   }))
+  .handleAction(
+    actions.setSelectedSelection,
+    (state, { payload: { selected } }) => ({
+      ...state,
+      selectionState: {
+        ...state.selectionState,
+        selected,
+      },
+    })
+  )
   .handleAction(actions.clearSelection, (state) => ({
     ...state,
     selectionState: {
       selected: false,
     },
-  }));
+  }))
+  .handleAction(actions.rowsUpdate, (state, { payload: { rows } }) => ({
+    ...state,
+    rows,
+  }))
+  .handleAction(
+    actions.setEditableCol,
+    (state, { payload: { editableCol } }) => ({
+      ...state,
+      editableCol,
+    })
+  )
+  .handleAction(
+    actions.updateColContent,
+    (state, { payload: { colId, rowId, content } }) => {
+      const { rows } = state;
+
+      rows[rowId - 1].cols[colId - 1].content = content;
+
+      return {
+        ...state,
+        rows,
+      };
+    }
+  )
+  .handleAction(
+    actions.updateColBackground,
+    (state, { payload: { colId, rowId, background } }) => {
+      const { rows } = state;
+
+      rows[rowId - 1].cols[colId - 1].background = background;
+
+      return {
+        ...state,
+        rows,
+      };
+    }
+  );
 
 export default tableReducer;

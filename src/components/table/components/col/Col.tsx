@@ -1,15 +1,17 @@
-import React from "react";
+import React, { useRef } from "react";
 import classNames from "classnames";
 import { ColType as ColDataType } from "../../duck/types";
 import { TableContext } from "../../duck/context";
 import {
   clearSelection,
   setEndSelection,
+  setSelectedSelection,
   setStartSelection,
   setTouched,
 } from "../../duck/actions";
-import { belongs } from "./duck/operations";
+import { belongs } from "../../duck/utils";
 import styles from "./Col.module.css";
+import { TextEdit } from "./components";
 
 interface ColType {
   colData: ColDataType;
@@ -17,8 +19,10 @@ interface ColType {
 }
 
 const Col: React.FC<ColType> = ({ colData, rowId }) => {
-  const { state, dispatch } = React.useContext(TableContext);
   const [selected, setSelected] = React.useState<boolean>(false);
+  const [editMode, setEditMode] = React.useState<boolean>(false);
+  const { state, dispatch } = React.useContext(TableContext);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     if (state.selectionState.start && state.selectionState.end) {
@@ -31,7 +35,17 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
     } else {
       setSelected(false);
     }
-  }, [state, rowId, colData]);
+
+    if (state.editableCol === +`${rowId}${colData.id}`) {
+      setEditMode(true);
+    } else {
+      setEditMode(false);
+    }
+  }, [state, rowId, colData, inputRef]);
+
+  if (!colData.display) {
+    return null;
+  }
 
   const selectStartHandler = () => {
     dispatch(clearSelection());
@@ -43,6 +57,7 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
 
   const selectEndHandler = () => {
     dispatch(setTouched({ touched: false }));
+    dispatch(setSelectedSelection({ selected: true }));
     dispatch(setEndSelection({ positionEnd: { rowId, colId: colData.id } }));
   };
 
@@ -54,15 +69,19 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
 
   return (
     <td
+      id={`col-${rowId}-${colData.id}`}
       onMouseDown={selectStartHandler}
       onMouseUp={selectEndHandler}
       onMouseEnter={selectUpdateHandler}
-      onDoubleClick={() => console.log("dbl")}
       colSpan={colData.colSpan}
       rowSpan={colData.rowSpan}
-      className={classNames(styles.col, { [styles.selected]: selected })}
+      className={classNames(styles.wrapper, { [styles.selected]: selected })}
+      style={{ background: colData.background }}
     >
-      {colData.content}
+      {editMode && colData.type === "text" && (
+        <TextEdit value={colData.content} rowId={rowId} colId={colData.id} />
+      )}
+      {!editMode && colData.content}
     </td>
   );
 };

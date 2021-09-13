@@ -1,0 +1,13 @@
+.colorButton {
+  width: 15px;
+  height: 15px;
+  border: 0;
+  border-radius: 10px;
+  margin: 9px 4px 0 0;
+  cursor: pointer;
+  transition: all ease 0.1s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}

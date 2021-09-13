@@ -20,6 +20,10 @@
     background-color: #fff;
     border-spacing: 0;
     border-right: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    table-layout: fixed;
+
+    &.filled {
+      border-bottom: 1px solid #ccc;
+    }
   }
 }

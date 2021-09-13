@@ -1,4 +1,4 @@
-.col {
+.wrapper {
   border: 1px solid #ccc;
   border-right: 0;
   border-bottom: 0;
@@ -7,6 +7,7 @@
   box-sizing: border-box;
   line-height: 1em;
   text-align: center;
+  position: relative;
 }
 
 .selected {
