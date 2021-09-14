@@ -51,13 +51,6 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
     rows,
   }))
   .handleAction(
-    actions.setEditableCol,
-    (state, { payload: { editableCol } }) => ({
-      ...state,
-      editableCol,
-    })
-  )
-  .handleAction(
     actions.updateColContent,
     (state, { payload: { colId, rowId, content } }) => {
       const { rows } = state;

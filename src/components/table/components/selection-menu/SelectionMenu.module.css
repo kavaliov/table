@@ -1,5 +1,56 @@
 .wrapper {
   position: absolute;
   display: flex;
-  gap: 10px;
+  gap: 5px;
+}
+
+.settingButton {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+
+  img {
+    width: 12px;
+  }
+}
+
+.menu {
+  list-style: none;
+  background: white;
+  border-radius: 2px;
+  box-shadow: 0 0 10px 4px #ececec;
+
+  li {
+    border-bottom: 1px solid #f3f3f3;
+
+    &:last-child {
+      border-bottom: 0;
+    }
+
+    &:last-child {
+      & > button {
+        border-radius: 0 0 2px 2px;
+      }
+    }
+
+    &:first-child {
+      & > button {
+        border-radius: 2px 2px 0 0;
+      }
+    }
+
+    & > button {
+      width: 100%;
+      background: white;
+      border: 0;
+      padding: 7px 15px;
+      text-align: left;
+      font-size: 12px;
+
+      &:not([disabled]):hover {
+        cursor: pointer;
+        background-color: #fafafa;
+      }
+    }
+  }
 }

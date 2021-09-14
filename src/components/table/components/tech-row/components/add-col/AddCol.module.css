@@ -1,0 +1,28 @@
+.wrapper {
+  position: absolute;
+  width: 6px;
+  height: 6px;
+  background: #c4c4c4;
+  top: -11px;
+  right: -4px;
+  border-radius: 5px;
+  line-height: 20px;
+
+  .addButton {
+    width: 20px;
+    height: 20px;
+    border-radius: 30px;
+    border: 0;
+    display: none;
+    transform: translate(-8px, -14px);
+    cursor: pointer;
+    background: #1d88ff;
+    color: white;
+  }
+
+  &:hover {
+    .addButton {
+      display: inline-block;
+    }
+  }
+}

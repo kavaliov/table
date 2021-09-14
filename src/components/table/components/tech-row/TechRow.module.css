@@ -1,0 +1,25 @@
+.wrapper {
+  padding: 0 10px;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transform: translateX(calc(100% + 8px));
+  box-shadow: none;
+
+  img {
+    margin-right: 4px;
+  }
+}
+
+.techCol {
+  position: relative;
+  height: 10px;
+  background: #d5e4ff;
+  border-left: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+
+  &:hover {
+    cursor: pointer;
+    background: #c8dbff;
+  }
+}

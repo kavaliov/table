@@ -1,0 +1,12 @@
+.techCol {
+  position: relative;
+  width: 10px;
+  background: #d5e4ff;
+  border-left: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+
+  &:hover {
+    cursor: pointer;
+    background: #c8dbff;
+  }
+}

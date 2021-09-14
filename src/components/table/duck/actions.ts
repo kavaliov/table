@@ -25,10 +25,6 @@ export const rowsUpdate = createStandardAction("TABLE/ROWS_UPDATE")<{
   rows: RowType[];
 }>();
 
-export const setEditableCol = createStandardAction("TABLE/SET_EDITABLE_COL")<{
-  editableCol: number;
-}>();
-
 export const updateColContent = createStandardAction(
   "TABLE/UPDATE_COL_CONTENT"
 )<{
@@ -42,5 +38,5 @@ export const updateColBackground = createStandardAction(
 )<{
   rowId: number;
   colId: number;
-  background: string;
+  background: string | undefined;
 }>();

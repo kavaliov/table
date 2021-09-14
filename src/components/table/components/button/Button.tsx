@@ -4,6 +4,7 @@ import styles from "./Button.module.css";
 
 interface ButtonType {
   onClick?: () => any;
+  onBlur?: () => any;
   className?: string;
   active?: boolean;
   style?: any;
@@ -13,6 +14,7 @@ interface ButtonType {
 const Button: React.FC<ButtonType> = ({
   children,
   onClick,
+  onBlur,
   className,
   style,
   active = false,
@@ -21,6 +23,7 @@ const Button: React.FC<ButtonType> = ({
   <button
     disabled={disabled}
     onClick={onClick}
+    onBlur={onBlur}
     className={classNames(styles.wrapper, className, {
       [styles.active]: active,
       [styles.disabled]: disabled,

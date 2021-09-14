@@ -35,12 +35,6 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
     } else {
       setSelected(false);
     }
-
-    if (state.editableCol === +`${rowId}${colData.id}`) {
-      setEditMode(true);
-    } else {
-      setEditMode(false);
-    }
   }, [state, rowId, colData, inputRef]);
 
   if (!colData.display) {
@@ -73,13 +67,20 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
       onMouseDown={selectStartHandler}
       onMouseUp={selectEndHandler}
       onMouseEnter={selectUpdateHandler}
+      onDoubleClick={() => setEditMode(true)}
       colSpan={colData.colSpan}
       rowSpan={colData.rowSpan}
       className={classNames(styles.wrapper, { [styles.selected]: selected })}
       style={{ background: colData.background }}
     >
       {editMode && colData.type === "text" && (
-        <TextEdit value={colData.content} rowId={rowId} colId={colData.id} />
+        <TextEdit
+          value={colData.content}
+          background={colData.background}
+          rowId={rowId}
+          colId={colData.id}
+          setEditMode={setEditMode}
+        />
       )}
       {!editMode && colData.content}
     </td>

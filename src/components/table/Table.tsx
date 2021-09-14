@@ -3,12 +3,22 @@ import { TableContext } from "./duck/context";
 import tableState from "./duck/state";
 import tableReducer from "./duck/reducer";
 import { RowType } from "./duck/types";
-import { Row, SelectionMenu, AddCol, AddRow } from "./components";
+import { Row, SelectionMenu, TechRow } from "./components";
 import styles from "./Table.module.css";
 import classNames from "classnames";
 
-const Table: React.FC = () => {
+interface TableType {
+  onChange?: (rows: RowType[]) => any;
+}
+
+const Table: React.FC<TableType> = ({ onChange }) => {
   const [state, dispatch] = React.useReducer(tableReducer, tableState);
+
+  React.useEffect(() => {
+    if (onChange && typeof onChange === "function") {
+      onChange(state.rows);
+    }
+  }, [state, onChange]);
 
   return (
     <TableContext.Provider value={{ dispatch, state }}>
@@ -19,14 +29,13 @@ const Table: React.FC = () => {
           })}
         >
           <tbody>
+            <TechRow />
             {state.rows.map((row: RowType) => (
               <Row key={row.id} rowData={row} />
             ))}
           </tbody>
         </table>
         <SelectionMenu />
-        <AddCol />
-        <AddRow />
       </div>
     </TableContext.Provider>
   );

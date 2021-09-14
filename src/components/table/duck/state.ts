@@ -6,7 +6,25 @@ const tableState: TableState = {
   selectionState: {
     selected: false,
   },
-  rows: [],
+  rows: [
+    {
+      id: 1,
+      cols: [
+        {
+          content: "",
+          type: "text",
+          display: true,
+          id: 1,
+        },
+        {
+          content: "",
+          type: "text",
+          display: true,
+          id: 2,
+        },
+      ],
+    },
+  ],
 };
 
 export default tableState;

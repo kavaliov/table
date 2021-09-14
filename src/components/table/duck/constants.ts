@@ -11,5 +11,5 @@ export const BACKGROUND_COLORS = [
   "#bae7ff",
   "#d6e4ff",
   "#efdbff",
-  "#ffd6e7",
+  "#ffccc7",
 ];

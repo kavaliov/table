@@ -15,8 +15,8 @@ export const getMenuPosition = (
 
   if (cell) {
     return {
-      top: cell.offsetTop + 8,
-      left: cell.offsetLeft + 8,
+      top: cell.offsetTop + 5,
+      left: cell.offsetLeft + 5,
     };
   }
 
