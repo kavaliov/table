@@ -8,7 +8,6 @@ export interface SketchContext {
 }
 
 export interface TableState {
-  editableCol: number;
   touched: boolean;
   selectionState: SelectionStateType;
   rows: RowType[];
@@ -16,6 +15,7 @@ export interface TableState {
 
 export interface SelectionStateType {
   selected: boolean;
+  selectedCols: PositionStateType[];
   start?: PositionStateType;
   end?: PositionStateType;
 }

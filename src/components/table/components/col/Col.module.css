@@ -13,4 +13,5 @@
 
 .selected {
   background: aliceblue;
+  border: 1px solid #24a7ff;
 }

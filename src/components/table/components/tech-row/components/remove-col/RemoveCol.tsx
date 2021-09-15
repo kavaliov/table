@@ -1,21 +1,21 @@
 import React from "react";
 import { TableContext } from "../../../../duck/context";
-import { removeRow } from "../../../../duck/actions";
+import { removeCol } from "../../../../duck/actions";
 import icon from "./assets/close-circle.svg";
-import styles from "./RemoveRow.module.css";
+import styles from "./RemoveCol.module.css";
 
-interface RemoveRowType {
-  rowId: number;
-  setRowSelected: React.Dispatch<React.SetStateAction<boolean>>;
+interface RemoveColType {
+  colId: number;
+  setColSelected: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const RemoveRow: React.FC<RemoveRowType> = ({ rowId, setRowSelected }) => {
+const RemoveCol: React.FC<RemoveColType> = ({ colId, setColSelected }) => {
   const { dispatch } = React.useContext(TableContext);
 
   const removeRowHandler = (e: any) => {
     e.stopPropagation();
-    dispatch(removeRow({ rowId }));
-    setRowSelected(false);
+    dispatch(removeCol({ colId }));
+    setColSelected(false);
   };
 
   return (
@@ -25,4 +25,4 @@ const RemoveRow: React.FC<RemoveRowType> = ({ rowId, setRowSelected }) => {
   );
 };
 
-export default RemoveRow;
+export default RemoveCol;

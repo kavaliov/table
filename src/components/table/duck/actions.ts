@@ -1,5 +1,5 @@
 import { createStandardAction } from "typesafe-actions";
-import { PositionStateType, RowType } from "./types";
+import { PositionStateType, RowType, SelectionStateType } from "./types";
 
 export const setStartSelection = createStandardAction(
   "TABLE/SET_START_SELECTION"
@@ -9,14 +9,7 @@ export const setStartSelection = createStandardAction(
 
 export const setEndSelection = createStandardAction("TABLE/SET_END_SELECTION")<{
   positionEnd: PositionStateType;
-}>();
-
-export const setSelectedSelection = createStandardAction(
-  "TABLE/SET_SELECTED_SELECTION"
-)<{ selected: boolean }>();
-
-export const setTouched = createStandardAction("TABLE/SET_TOUCHED")<{
-  touched: boolean;
+  finished: boolean;
 }>();
 
 export const clearSelection = createStandardAction("TABLE/CLEAR_SELECTION")();
@@ -36,7 +29,22 @@ export const updateColContent = createStandardAction(
 export const updateColBackground = createStandardAction(
   "TABLE/UPDATE_COL_BACKGROUND"
 )<{
-  rowId: number;
-  colId: number;
+  selectionState: SelectionStateType;
   background: string | undefined;
+}>();
+
+export const selectRow = createStandardAction("TABLE/SELECT_ROW")<{
+  rowId: number;
+}>();
+
+export const removeRow = createStandardAction("TABLE/REMOVE_ROW")<{
+  rowId: number;
+}>();
+
+export const selectCol = createStandardAction("TABLE/SELECT_COL")<{
+  colId: number;
+}>();
+
+export const removeCol = createStandardAction("TABLE/REMOVE_COL")<{
+  colId: number;
 }>();

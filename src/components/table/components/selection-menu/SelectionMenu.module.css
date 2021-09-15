@@ -1,7 +1,11 @@
 .wrapper {
-  position: absolute;
-  display: flex;
   gap: 5px;
+  position: absolute;
+  display: none;
+
+  &.selected {
+    display: flex;
+  }
 }
 
 .settingButton {

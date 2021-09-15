@@ -4,6 +4,13 @@
   background: #d5e4ff;
   border-left: 1px solid #ccc;
   border-top: 1px solid #ccc;
+  border-bottom: 1px solid transparent;
+
+  &.active {
+    background: #c8dbff;
+    border: 1px solid #24a7ff;
+    border-right: 0;
+  }
 
   &:hover {
     cursor: pointer;

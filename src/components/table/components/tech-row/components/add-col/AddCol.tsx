@@ -11,7 +11,8 @@ interface AddColType {
 const AddCol: React.FC<AddColType> = ({ colId }) => {
   const { dispatch, state } = React.useContext(TableContext);
 
-  const addColHandler = (): void => {
+  const addColHandler = (e: any): void => {
+    e.stopPropagation();
     dispatch(rowsUpdate({ rows: generateRowsWithNewCol(state.rows, colId) }));
   };
 

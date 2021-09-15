@@ -1,8 +1,9 @@
 import React from "react";
+import classNames from "classnames";
+import OutsideClickHandler from "react-outside-click-handler";
 import { TableContext } from "../../duck/context";
-import { getMenuPosition, PositionType } from "./duck/utils";
-import { useOutsideClick } from "../../duck/hooks";
 import Button from "../button";
+import { getMenuPosition, PositionType } from "./duck/utils";
 import { Merge, ChangeBackground } from "./components";
 import icon from "./assets/setting.svg";
 import styles from "./SelectionMenu.module.css";
@@ -12,8 +13,6 @@ const SelectionMenu: React.FC = () => {
   const [position, setPosition] = React.useState<PositionType>();
   const [opened, setOpened] = React.useState<boolean>(false);
 
-  const menuRef = useOutsideClick<HTMLUListElement>(() => setOpened(false));
-
   React.useEffect(() => {
     if (state.selectionState.start && state.selectionState.end) {
       setPosition(
@@ -22,12 +21,13 @@ const SelectionMenu: React.FC = () => {
     }
   }, [state]);
 
-  if (!state.selectionState.selected) {
-    return null;
-  }
-
   return (
-    <div className={styles.wrapper} style={position}>
+    <div
+      className={classNames(styles.wrapper, {
+        [styles.selected]: state.selectionState.selected,
+      })}
+      style={position}
+    >
       <Button
         onClick={() => setOpened(!opened)}
         className={styles.settingButton}
@@ -35,10 +35,12 @@ const SelectionMenu: React.FC = () => {
         <img src={icon} alt="" />
       </Button>
       {opened && (
-        <ul className={styles.menu} ref={menuRef}>
-          <ChangeBackground />
-          <Merge />
-        </ul>
+        <OutsideClickHandler onOutsideClick={() => setOpened(false)}>
+          <ul className={styles.menu}>
+            <ChangeBackground />
+            <Merge />
+          </ul>
+        </OutsideClickHandler>
       )}
     </div>
   );

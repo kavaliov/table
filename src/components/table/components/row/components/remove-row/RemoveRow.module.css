@@ -1,0 +1,15 @@
+.wrapper {
+  position: absolute;
+  top: 50%;
+  left: -25px;
+  transform: translateY(-50%);
+  border: 0;
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  cursor: pointer;
+
+  img {
+    width: 20px;
+  }
+}

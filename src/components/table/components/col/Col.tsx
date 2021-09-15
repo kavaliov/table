@@ -2,16 +2,10 @@ import React, { useRef } from "react";
 import classNames from "classnames";
 import { ColType as ColDataType } from "../../duck/types";
 import { TableContext } from "../../duck/context";
-import {
-  clearSelection,
-  setEndSelection,
-  setSelectedSelection,
-  setStartSelection,
-  setTouched,
-} from "../../duck/actions";
+import { setEndSelection, setStartSelection } from "../../duck/actions";
 import { belongs } from "../../duck/utils";
-import styles from "./Col.module.css";
 import { TextEdit } from "./components";
+import styles from "./Col.module.css";
 
 interface ColType {
   colData: ColDataType;
@@ -42,22 +36,28 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
   }
 
   const selectStartHandler = () => {
-    dispatch(clearSelection());
-    dispatch(setTouched({ touched: true }));
     dispatch(
       setStartSelection({ positionStart: { rowId, colId: colData.id } })
     );
   };
 
   const selectEndHandler = () => {
-    dispatch(setTouched({ touched: false }));
-    dispatch(setSelectedSelection({ selected: true }));
-    dispatch(setEndSelection({ positionEnd: { rowId, colId: colData.id } }));
+    dispatch(
+      setEndSelection({
+        positionEnd: { rowId, colId: colData.id },
+        finished: true,
+      })
+    );
   };
 
   const selectUpdateHandler = () => {
     if (state.touched) {
-      dispatch(setEndSelection({ positionEnd: { rowId, colId: colData.id } }));
+      dispatch(
+        setEndSelection({
+          positionEnd: { rowId, colId: colData.id },
+          finished: false,
+        })
+      );
     }
   };
 

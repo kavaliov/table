@@ -11,7 +11,8 @@ interface AddRowType {
 const AddRow: React.FC<AddRowType> = ({ rowId }) => {
   const { dispatch, state } = React.useContext(TableContext);
 
-  const addNewRowHandler = () => {
+  const addNewRowHandler = (e: any) => {
+    e.stopPropagation();
     dispatch(rowsUpdate({ rows: generateNewRows(state.rows, rowId) }));
   };
 
