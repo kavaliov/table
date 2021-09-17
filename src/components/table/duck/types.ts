@@ -15,9 +15,14 @@ export interface TableState {
 
 export interface SelectionStateType {
   selected: boolean;
-  selectedCols: PositionStateType[];
+  selectedCols: SelectedColsType[];
   start?: PositionStateType;
   end?: PositionStateType;
+}
+
+export interface SelectedColsType extends PositionStateType {
+  rowSpan?: number;
+  colSpan?: number;
 }
 
 export interface PositionStateType {
@@ -36,6 +41,8 @@ export interface ColType {
   type: string;
   display: boolean;
   content: string;
+  resourceFor?: PositionStateType;
+  resources?: PositionStateType[];
   background?: string;
   rowSpan?: number;
   colSpan?: number;

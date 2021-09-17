@@ -2,7 +2,7 @@ import { createReducer, ActionType } from "typesafe-actions";
 import initialState from "./state";
 import * as actions from "./actions";
 import * as Types from "./types";
-import { ColType, PositionStateType, RowType } from "./types";
+import { ColType, PositionStateType, RowType, SelectedColsType } from "./types";
 import { belongs } from "./utils";
 
 type Action = ActionType<typeof actions>;
@@ -23,22 +23,31 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
   .handleAction(
     actions.setEndSelection,
     (state, { payload: { positionEnd, finished } }) => {
-      const selectedCols: PositionStateType[] = [];
+      const selectedCols: SelectedColsType[] = [];
+      const { rows } = state;
 
       if (finished && state.selectionState.start) {
         for (
-          let r = state.selectionState.start.rowId;
-          r <= positionEnd.rowId;
-          r += 1
+          let rowId = state.selectionState.start.rowId;
+          rowId <= positionEnd.rowId;
+          rowId += 1
         ) {
-          const col = { rowId: r };
+          const col = { rowId };
 
           for (
-            let c = state.selectionState.start.colId;
-            c <= positionEnd.colId;
-            c += 1
+            let colId = state.selectionState.start.colId;
+            colId <= positionEnd.colId;
+            colId += 1
           ) {
-            selectedCols.push({ ...col, colId: c });
+            const colSpan = rows[rowId - 1].cols[colId - 1].colSpan;
+            const rowSpan = rows[rowId - 1].cols[colId - 1].rowSpan;
+
+            selectedCols.push({
+              ...col,
+              colId,
+              ...(rowSpan ? { rowSpan } : {}),
+              ...(colSpan ? { colSpan } : {}),
+            });
           }
         }
       }
@@ -126,7 +135,7 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
   .handleAction(actions.removeCol, (state, { payload: { colId } }) => {
     const newRows = state.rows;
 
-    newRows.map((row: RowType) => {
+    newRows.forEach((row: RowType) => {
       row.cols.splice(colId - 1, 1);
       row.cols = row.cols.map((col: ColType, index) => ({
         ...col,

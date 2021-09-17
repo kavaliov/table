@@ -44,7 +44,12 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
   const selectEndHandler = () => {
     dispatch(
       setEndSelection({
-        positionEnd: { rowId, colId: colData.id },
+        positionEnd: {
+          rowId: colData.rowSpan ? rowId + colData.rowSpan - 1 : rowId,
+          colId: colData.colSpan
+            ? colData.id + colData.colSpan - 1
+            : colData.id,
+        },
         finished: true,
       })
     );

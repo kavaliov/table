@@ -3,6 +3,7 @@ import {
   ColType,
   PositionStateType,
   RowType,
+  SelectedColsType,
   TableState,
 } from "../../../../../duck/types";
 import { belongs, getRange } from "../../../../../duck/utils";
@@ -12,40 +13,67 @@ export const mergeCols = (state: TableState, dispatch: AnyDispatch): void => {
   const { selectionState, rows } = state;
 
   if (selectionState.end && selectionState.start) {
+    const { selectedCols } = selectionState;
     const range = getRange(selectionState.start, selectionState.end);
-    const colSpan = range.col.max + 1 - range.col.min;
-    const rowSpan = range.row.max + 1 - range.row.min;
-    const targetCol = { row: range.row.min, col: range.col.min };
+    const targetCol = { rowId: range.row.min, colId: range.col.min };
+    let colSpan = { prevRowId: selectedCols[0].rowId, prevColId: 0, count: 0 };
+    let rowSpan = { prevRowId: 0, count: 0 };
 
-    if (colSpan > 1) {
-      rows[targetCol.row - 1].cols[targetCol.col - 1].colSpan = colSpan;
-    }
-
-    if (rowSpan > 1) {
-      rows[targetCol.row - 1].cols[targetCol.col - 1].rowSpan = rowSpan;
-    }
-
-    rows.forEach((row: RowType) => {
-      row.cols = row.cols.map((col: ColType) => {
-        if (
-          belongs(
-            selectionState.start as PositionStateType,
-            selectionState.end as PositionStateType,
-            {
-              rowId: row.id,
-              colId: col.id,
-            }
-          ) &&
-          !(targetCol.row === row.id && targetCol.col === col.id)
-        ) {
-          return { ...col, display: false };
+    selectedCols.forEach((selectedCol: SelectedColsType, index) => {
+      if (
+        selectedCol.colId !== colSpan.prevColId &&
+        selectedCol.rowId === colSpan.prevRowId
+      ) {
+        colSpan.prevColId = selectedCol.colId;
+        colSpan.count += 1;
+        if (selectedCols.length === index - 1 && selectedCol.colSpan) {
+          colSpan.count += selectedCol.colSpan;
         }
+      }
 
-        return col;
-      });
+      if (selectedCol.rowId !== rowSpan.prevRowId) {
+        rowSpan.prevRowId = selectedCol.rowId;
+        rowSpan.count += 1;
+        if (
+          selectionState.selectedCols.length === index - 1 &&
+          selectedCol.rowSpan
+        ) {
+          rowSpan.count += selectedCol.rowSpan;
+        }
+      }
     });
 
-    dispatch(rowsUpdate({ rows }));
+    const newRows = rows.map((row: RowType) => {
+      const newCols = row.cols.map((col: ColType) => {
+        const isTargetCol =
+          targetCol.rowId === row.id && targetCol.colId === col.id;
+        const isBelongs = belongs(
+          selectionState.start as PositionStateType,
+          selectionState.end as PositionStateType,
+          {
+            rowId: row.id,
+            colId: col.id,
+          }
+        );
+
+        if (isTargetCol && colSpan.count > 1) {
+          col.colSpan = colSpan.count;
+        }
+
+        if (isTargetCol && rowSpan.count > 1) {
+          col.rowSpan = rowSpan.count;
+        }
+
+        return {
+          ...col,
+          ...(isBelongs && !isTargetCol ? { display: false } : {}),
+        };
+      });
+
+      return { ...row, cols: newCols };
+    });
+
+    dispatch(rowsUpdate({ rows: newRows }));
     dispatch(clearSelection());
   }
 };

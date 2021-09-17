@@ -18,6 +18,8 @@ const Table: React.FC<TableType> = ({ onChange }) => {
     if (onChange && typeof onChange === "function") {
       onChange(state.rows);
     }
+
+    console.log(state);
   }, [state, onChange]);
 
   return (
