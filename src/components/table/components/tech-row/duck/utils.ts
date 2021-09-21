@@ -11,11 +11,6 @@ export const generateRowsWithNewCol = (
     // updating all colId in curren row
     let newCols = cols.map((col: ColType) => {
       if (col.id > colId) {
-        // update resourceFor colId
-        if (col.resourceFor && col.resourceFor.colId > colId) {
-          col.resourceFor.colId += 1;
-        }
-
         return {
           ...col,
           id: col.id + 1,
@@ -27,6 +22,14 @@ export const generateRowsWithNewCol = (
                 })),
               }
             : {}),
+          ...(col.resourceFor && col.resourceFor.colId > colId
+            ? {
+                resourceFor: {
+                  ...col.resourceFor,
+                  colId: col.resourceFor.colId + 1,
+                },
+              }
+            : col.resourceFor),
         };
       }
       return col;

@@ -1,12 +1,23 @@
 .wrapper {
   position: absolute;
-  width: 6px;
-  height: 6px;
-  background: #c4c4c4;
-  top: -11px;
-  right: -4px;
-  border-radius: 5px;
+  width: 20px;
+  height: 20px;
+  top: -24px;
+  right: -11px;
   line-height: 20px;
+  display: flex;
+
+  &::after {
+    position: absolute;
+    content: "";
+    display: block;
+    width: 8px;
+    height: 8px;
+    background: #c4c4c4;
+    border-radius: 10px;
+    top: 8px;
+    left: 5px;
+  }
 
   .addButton {
     width: 20px;
@@ -14,10 +25,12 @@
     border-radius: 30px;
     border: 0;
     display: none;
-    transform: translate(-8px, -14px);
     cursor: pointer;
     background: #1d88ff;
     color: white;
+    position: relative;
+    z-index: 1;
+    line-height: 20px;
   }
 
   &:hover {
