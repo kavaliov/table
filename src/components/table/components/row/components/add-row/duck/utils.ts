@@ -54,8 +54,31 @@ export const generateNewRows = (rows: RowType[], rowId: number): RowType[] => {
 
   const newRows = rows.map((row: RowType) => {
     if (row.id > rowId) {
-      return { ...row, id: row.id + 1 };
+      let newCols = row.cols.map((col: ColType) => {
+        return {
+          ...col,
+          ...(col.resources
+            ? {
+                resources: col.resources.map((currentResource) => ({
+                  ...currentResource,
+                  rowId: currentResource.rowId + 1,
+                })),
+              }
+            : {}),
+          ...(col.resourceFor && col.resourceFor.rowId > rowId
+            ? {
+                resourceFor: {
+                  ...col.resourceFor,
+                  rowId: col.resourceFor.rowId + 1,
+                },
+              }
+            : col.resourceFor),
+        };
+      });
+
+      return { ...row, id: row.id + 1, cols: newCols };
     }
+
     return row;
   });
 

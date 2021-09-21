@@ -11,7 +11,7 @@ import { clearSelection, rowsUpdate } from "../../../../../duck/actions";
 
 export const mergeCols = (state: TableState, dispatch: AnyDispatch): void => {
   const { selectionState, rows } = state;
-
+  const resources: PositionStateType[] = [];
   const { selectedCols } = selectionState;
   const targetCol = {
     rowId: selectedCols[0].rowId,
@@ -46,15 +46,16 @@ export const mergeCols = (state: TableState, dispatch: AnyDispatch): void => {
 
   const newRows = rows.map((row: RowType) => {
     const newCols = row.cols.map((col: ColType) => {
+      const currentPosition: PositionStateType = {
+        rowId: row.id,
+        colId: col.id,
+      };
       const isTargetCol =
         targetCol.rowId === row.id && targetCol.colId === col.id;
       const isBelongs = belongs(
         selectionState.start as PositionStateType,
         selectionState.end as PositionStateType,
-        {
-          rowId: row.id,
-          colId: col.id,
-        }
+        currentPosition
       );
 
       if (isTargetCol && colSpan.count > 1) {
@@ -65,8 +66,13 @@ export const mergeCols = (state: TableState, dispatch: AnyDispatch): void => {
         col.rowSpan = rowSpan.count;
       }
 
+      if (isBelongs && !isTargetCol) {
+        resources.push(currentPosition);
+      }
+
       return {
         ...col,
+        ...(isTargetCol ? { resources: [] } : {}),
         ...(isBelongs && !isTargetCol
           ? { display: false, resourceFor: targetCol }
           : {}),
@@ -75,6 +81,8 @@ export const mergeCols = (state: TableState, dispatch: AnyDispatch): void => {
 
     return { ...row, cols: newCols };
   });
+
+  newRows[targetCol.rowId - 1].cols[targetCol.colId - 1].resources = resources;
 
   dispatch(rowsUpdate({ rows: newRows }));
   dispatch(clearSelection());
