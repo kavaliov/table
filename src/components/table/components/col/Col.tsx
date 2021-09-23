@@ -36,9 +36,23 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
   }
 
   const selectStartHandler = () => {
-    dispatch(
-      setStartSelection({ positionStart: { rowId, colId: colData.id } })
-    );
+    if (!state.touched) {
+      dispatch(
+        setStartSelection({ positionStart: { rowId, colId: colData.id } })
+      );
+    } else {
+      dispatch(
+        setEndSelection({
+          positionEnd: {
+            rowId: colData.rowSpan ? rowId + colData.rowSpan - 1 : rowId,
+            colId: colData.colSpan
+              ? colData.id + colData.colSpan - 1
+              : colData.id,
+          },
+          finished: true,
+        })
+      );
+    }
   };
 
   const selectEndHandler = () => {

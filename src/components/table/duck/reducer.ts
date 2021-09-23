@@ -3,7 +3,7 @@ import initialState from "./state";
 import * as actions from "./actions";
 import * as Types from "./types";
 import { ColType, PositionStateType, RowType, SelectedColsType } from "./types";
-import { belongs } from "./utils";
+import { belongs, getRange } from "./utils";
 
 type Action = ActionType<typeof actions>;
 
@@ -25,18 +25,23 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
     (state, { payload: { positionEnd, finished } }) => {
       const selectedCols: SelectedColsType[] = [];
       const { rows } = state;
+      const stateStart = state.selectionState.start;
 
-      if (finished && state.selectionState.start) {
+      if (finished && stateStart) {
+        const range = getRange(stateStart, positionEnd);
+        const start = { rowId: range.row.min, colId: range.col.min };
+        const end = { rowId: range.row.max, colId: range.col.max };
+
         for (
-          let rowId = state.selectionState.start.rowId;
-          rowId <= positionEnd.rowId;
+          let rowId = start.rowId;
+          rowId <= end.rowId;
           rowId += 1
         ) {
           const col = { rowId };
 
           for (
-            let colId = state.selectionState.start.colId;
-            colId <= positionEnd.colId;
+            let colId = start.colId;
+            colId <= end.colId;
             colId += 1
           ) {
             const colSpan = rows[rowId - 1].cols[colId - 1].colSpan;

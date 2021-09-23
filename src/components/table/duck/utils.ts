@@ -29,6 +29,24 @@ export const belongs = (
   );
 };
 
+export const isSingleSelection = (
+  selectionState: SelectionStateType
+): boolean => {
+  const { selectedCols, start, end } = selectionState;
+  const firstCol = selectedCols[0];
+  const rowSpan = firstCol?.rowSpan ? firstCol.rowSpan - 1 : 0;
+  const colSpan = firstCol?.colSpan ? firstCol.colSpan - 1 : 0;
+
+  return (
+    (rowSpan > 0 || colSpan > 0) &&
+    !!start &&
+    !!end &&
+    end.rowId === start.rowId + rowSpan &&
+    end.colId === start.colId + colSpan &&
+    selectedCols.length > 1
+  );
+};
+
 export const getCellCount = (selectionState: SelectionStateType): number => {
   if (selectionState.start && selectionState.end) {
     const range = getRange(selectionState.start, selectionState.end);

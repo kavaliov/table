@@ -22,11 +22,6 @@ export const generateNewRows = (rows: RowType[], rowId: number): RowType[] => {
         nextCol.resourceFor.colId === prevCol.id &&
         nextCol.resourceFor.rowId === prevRow.id
       ) {
-        rows[rowId - 1].cols[index].resources?.push({
-          rowId: rowId + 2,
-          colId: col.id,
-        });
-
         newRow.cols.push({
           ...newCol,
           display: false,
@@ -38,13 +33,6 @@ export const generateNewRows = (rows: RowType[], rowId: number): RowType[] => {
         nextCol.resourceFor.colId === prevCol.resourceFor.colId &&
         nextCol.resourceFor.rowId === prevCol.resourceFor.rowId
       ) {
-        rows[prevCol.resourceFor.rowId - 1].cols[
-          prevCol.resourceFor.colId - 1
-        ].resources?.push({
-          rowId: rowId + 2,
-          colId: col.id,
-        });
-
         newRow.cols.push({
           ...newCol,
           display: false,
@@ -82,14 +70,6 @@ export const generateNewRows = (rows: RowType[], rowId: number): RowType[] => {
     if (row.id > rowId) {
       let newCols = row.cols.map((col: ColType) => ({
         ...col,
-        ...(col.resources
-          ? {
-              resources: col.resources.map((currentResource) => ({
-                ...currentResource,
-                rowId: currentResource.rowId + 1,
-              })),
-            }
-          : {}),
         ...(col.resourceFor && col.resourceFor.rowId > rowId
           ? {
               resourceFor: {
@@ -107,6 +87,23 @@ export const generateNewRows = (rows: RowType[], rowId: number): RowType[] => {
   });
 
   newRows.splice(rowId, 0, newRow);
+
+  newRows.forEach((row: RowType) => {
+    row.cols.forEach((col: ColType) => {
+      if (col.resources) {
+        newRows[row.id - 1].cols[col.id - 1].resources = [];
+      }
+
+      if (col.resourceFor) {
+        newRows[col.resourceFor.rowId - 1].cols[
+          col.resourceFor.colId - 1
+        ].resources?.push({
+          colId: col.id,
+          rowId: row.id,
+        });
+      }
+    });
+  });
 
   return newRows;
 };

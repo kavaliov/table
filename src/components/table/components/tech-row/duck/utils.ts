@@ -4,8 +4,8 @@ import { emptyCol } from "../../../duck/constants";
 export const generateRowsWithNewCol = (
   rows: RowType[],
   colId: number
-): RowType[] =>
-  rows.map((row: RowType) => {
+): RowType[] => {
+  const newRows = rows.map((row: RowType) => {
     const { cols } = row;
 
     // updating all colId in curren row
@@ -60,7 +60,6 @@ export const generateRowsWithNewCol = (
     if (newCols[colId - 1] && newCols[colId - 1].colSpan) {
       // @ts-ignore
       newCols[colId - 1].colSpan += 1;
-      newCols[colId - 1].resources?.push({ rowId: row.id, colId: newCol.id });
     }
 
     if (lineContinuation) {
@@ -79,6 +78,26 @@ export const generateRowsWithNewCol = (
       cols: newCols,
     };
   });
+
+  newRows.forEach((row: RowType) => {
+    row.cols.forEach((col: ColType) => {
+      if (col.resources) {
+        newRows[row.id - 1].cols[col.id - 1].resources = [];
+      }
+
+      if (col.resourceFor) {
+        newRows[col.resourceFor.rowId - 1].cols[
+          col.resourceFor.colId - 1
+        ].resources?.push({
+          colId: col.id,
+          rowId: row.id,
+        });
+      }
+    });
+  });
+
+  return newRows;
+};
 
 export const getColCount = (rows: RowType[]): number => {
   let count = 0;
