@@ -1,3 +1,4 @@
+import { omit } from "lodash-es";
 import {
   AnyDispatch,
   ColType,
@@ -71,7 +72,9 @@ export const mergeCols = (state: TableState, dispatch: AnyDispatch): void => {
       }
 
       return {
-        ...col,
+        ...(isBelongs && !isTargetCol
+          ? omit(col, ["colSpan", "rowSpan"])
+          : col),
         ...(isTargetCol ? { resources: [] } : {}),
         ...(isBelongs && !isTargetCol
           ? { display: false, resourceFor: targetCol }
