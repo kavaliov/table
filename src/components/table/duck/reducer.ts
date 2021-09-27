@@ -32,18 +32,10 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
         const start = { rowId: range.row.min, colId: range.col.min };
         const end = { rowId: range.row.max, colId: range.col.max };
 
-        for (
-          let rowId = start.rowId;
-          rowId <= end.rowId;
-          rowId += 1
-        ) {
+        for (let rowId = start.rowId; rowId <= end.rowId; rowId += 1) {
           const col = { rowId };
 
-          for (
-            let colId = start.colId;
-            colId <= end.colId;
-            colId += 1
-          ) {
+          for (let colId = start.colId; colId <= end.colId; colId += 1) {
             const colSpan = rows[rowId - 1].cols[colId - 1].colSpan;
             const rowSpan = rows[rowId - 1].cols[colId - 1].rowSpan;
 

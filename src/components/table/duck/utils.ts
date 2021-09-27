@@ -37,6 +37,10 @@ export const isSingleSelection = (
   const rowSpan = firstCol?.rowSpan ? firstCol.rowSpan - 1 : 0;
   const colSpan = firstCol?.colSpan ? firstCol.colSpan - 1 : 0;
 
+  if (start && end && start.rowId === end.rowId && start.colId === end.colId) {
+    return true;
+  }
+
   return (
     (rowSpan > 0 || colSpan > 0) &&
     !!start &&
@@ -47,14 +51,26 @@ export const isSingleSelection = (
   );
 };
 
-export const getCellCount = (selectionState: SelectionStateType): number => {
-  if (selectionState.start && selectionState.end) {
-    const range = getRange(selectionState.start, selectionState.end);
+export const intersects = (
+  colRange: RangeType,
+  selectionRange: RangeType
+): "full" | "part" | "not" => {
+  const left = Math.max(colRange.col.min - 1, selectionRange.col.min - 1);
+  const right = Math.min(colRange.col.max, selectionRange.col.max);
+  const bottom = Math.max(colRange.row.min - 1, selectionRange.row.min - 1);
+  const top = Math.min(colRange.row.max, selectionRange.row.max);
+  const colSquare =
+    (colRange.col.max - colRange.col.min + 1) *
+    (colRange.row.max - colRange.row.min + 1);
 
-    return (
-      (range.row.max - range.row.min + 1) * (range.col.max - range.col.min + 1)
-    );
+  if (left < right && bottom < top) {
+    const intersectsSquare = (right - left) * (top - bottom);
+    if (intersectsSquare === colSquare) {
+      return "full";
+    } else {
+      return "part";
+    }
+  } else {
+    return "not";
   }
-
-  return 0;
 };

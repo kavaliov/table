@@ -1,7 +1,6 @@
 import React from "react";
 import { TableContext } from "../../../../duck/context";
-import { mergeCols } from "./duck/operations";
-import { isSingleSelection } from "../../../../duck/utils";
+import { mergeAvailable, mergeCols } from "./duck/operations";
 
 const Merge: React.FC = () => {
   const { state, dispatch } = React.useContext(TableContext);
@@ -13,10 +12,7 @@ const Merge: React.FC = () => {
   return (
     <li>
       <button
-        disabled={
-          isSingleSelection(state.selectionState) ||
-          !(state.selectionState.selectedCols.length > 1)
-        }
+        disabled={!mergeAvailable(state)}
         onClick={mergeHandler}
       >
         Merge

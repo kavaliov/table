@@ -3,11 +3,16 @@ import {
   AnyDispatch,
   ColType,
   PositionStateType,
+  RangeType,
   RowType,
   SelectedColsType,
   TableState,
 } from "../../../../../duck/types";
-import { belongs } from "../../../../../duck/utils";
+import {
+  belongs,
+  intersects,
+  isSingleSelection,
+} from "../../../../../duck/utils";
 import { clearSelection, rowsUpdate } from "../../../../../duck/actions";
 
 export const mergeCols = (state: TableState, dispatch: AnyDispatch): void => {
@@ -89,4 +94,85 @@ export const mergeCols = (state: TableState, dispatch: AnyDispatch): void => {
 
   dispatch(rowsUpdate({ rows: newRows }));
   dispatch(clearSelection());
+};
+
+export const mergeAvailable = (state: TableState): boolean => {
+  const { selectionState, rows } = state;
+  const { selectedCols, start, end } = selectionState;
+  const singleSelection = isSingleSelection(selectionState);
+  const mergedCols: RangeType[] = [];
+  let isIntersects = false;
+  const size = {
+    maxColId: 0,
+    maxRowId: 0,
+    startColId: 0,
+    startRowId: 0,
+    get: function () {
+      return (
+        (this.maxColId - this.startColId + 1) *
+        (this.maxRowId - this.startRowId + 1)
+      );
+    },
+  };
+
+  rows.forEach((row: RowType) => {
+    row.cols.forEach((col: ColType) => {
+      if (col.colSpan || col.rowSpan) {
+        const colSpan = col.colSpan || 0;
+        const rowSpan = col.rowSpan || 0;
+
+        mergedCols.push({
+          row: {
+            min: row.id,
+            max: !!rowSpan ? row.id + rowSpan - 1 : row.id,
+          },
+          col: {
+            min: col.id,
+            max: !!colSpan ? col.id + colSpan - 1 : col.id,
+          },
+        });
+      }
+    });
+  });
+
+  selectedCols.forEach((col: SelectedColsType, index) => {
+    const colId = col.colSpan ? col.colId + col.colSpan - 1 : col.colId;
+    const rowId = col.rowSpan ? col.rowId + col.rowSpan - 1 : col.rowId;
+
+    if (colId > size.maxColId) {
+      size.maxColId = colId;
+    }
+
+    if (rowId > size.maxRowId) {
+      size.maxRowId = rowId;
+    }
+
+    if (index === 0) {
+      size.startColId = col.colId;
+      size.startRowId = col.rowId;
+    }
+  });
+
+  mergedCols.forEach((mergedCol: RangeType) => {
+    if (start && end && !isIntersects) {
+      const intersectStatus = intersects(mergedCol, {
+        row: {
+          min: start.rowId,
+          max: end.rowId,
+        },
+        col: {
+          min: start.colId,
+          max: end.colId,
+        },
+      });
+
+      if (intersectStatus === "part") {
+        isIntersects = true;
+      }
+    }
+  });
+
+  return (
+    !singleSelection && size.get() === selectedCols.length && !isIntersects
+  );
 };

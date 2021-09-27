@@ -13,7 +13,9 @@ const Unmerge: React.FC = () => {
   return (
     <li>
       <button
-        disabled={!isSingleSelection(state.selectionState)}
+        disabled={
+          !(isSingleSelection(state.selectionState))
+        }
         onClick={unmergeHandler}
       >
         Unmerge

@@ -1,6 +1,6 @@
-import React, { useRef } from "react";
+import React from "react";
 import classNames from "classnames";
-import { ColType as ColDataType } from "../../duck/types";
+import { ColType as ColDataType, PositionStateType } from "../../duck/types";
 import { TableContext } from "../../duck/context";
 import { setEndSelection, setStartSelection } from "../../duck/actions";
 import { belongs } from "../../duck/utils";
@@ -15,8 +15,11 @@ interface ColType {
 const Col: React.FC<ColType> = ({ colData, rowId }) => {
   const [selected, setSelected] = React.useState<boolean>(false);
   const [editMode, setEditMode] = React.useState<boolean>(false);
+  const [positionEnd, setPositionEnd] = React.useState<PositionStateType>({
+    rowId: 0,
+    colId: 0,
+  });
   const { state, dispatch } = React.useContext(TableContext);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   React.useEffect(() => {
     if (state.selectionState.start && state.selectionState.end) {
@@ -29,7 +32,22 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
     } else {
       setSelected(false);
     }
-  }, [state, rowId, colData, inputRef]);
+
+    setPositionEnd({
+      rowId:
+        colData.rowSpan &&
+        state.selectionState.start &&
+        state.selectionState.start.rowId < rowId
+          ? rowId + colData.rowSpan - 1
+          : rowId,
+      colId:
+        colData.colSpan &&
+        state.selectionState.start &&
+        state.selectionState.start.colId < colData.id
+          ? colData.id + colData.colSpan - 1
+          : colData.id,
+    });
+  }, [state, rowId, colData]);
 
   if (!colData.display) {
     return null;
@@ -43,12 +61,7 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
     } else {
       dispatch(
         setEndSelection({
-          positionEnd: {
-            rowId: colData.rowSpan ? rowId + colData.rowSpan - 1 : rowId,
-            colId: colData.colSpan
-              ? colData.id + colData.colSpan - 1
-              : colData.id,
-          },
+          positionEnd,
           finished: true,
         })
       );
@@ -58,12 +71,7 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
   const selectEndHandler = () => {
     dispatch(
       setEndSelection({
-        positionEnd: {
-          rowId: colData.rowSpan ? rowId + colData.rowSpan - 1 : rowId,
-          colId: colData.colSpan
-            ? colData.id + colData.colSpan - 1
-            : colData.id,
-        },
+        positionEnd,
         finished: true,
       })
     );
