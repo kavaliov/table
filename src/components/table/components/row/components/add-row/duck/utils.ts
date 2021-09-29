@@ -94,7 +94,10 @@ export const generateNewRows = (rows: RowType[], rowId: number): RowType[] => {
         newRows[row.id - 1].cols[col.id - 1].resources = [];
       }
 
-      if (col.resourceFor) {
+      if (
+        col.resourceFor &&
+        newRows[col.resourceFor.rowId - 1].cols[col.resourceFor.colId - 1]
+      ) {
         newRows[col.resourceFor.rowId - 1].cols[
           col.resourceFor.colId - 1
         ].resources?.push({

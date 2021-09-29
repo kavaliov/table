@@ -88,7 +88,7 @@ export const generateRowsWithNewCol = (
       if (col.resourceFor) {
         newRows[col.resourceFor.rowId - 1].cols[
           col.resourceFor.colId - 1
-        ].resources?.push({
+        ]?.resources?.push({
           colId: col.id,
           rowId: row.id,
         });
