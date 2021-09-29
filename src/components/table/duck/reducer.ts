@@ -4,6 +4,7 @@ import * as actions from "./actions";
 import * as Types from "./types";
 import { ColType, PositionStateType, RowType, SelectedColsType } from "./types";
 import { belongs, getRange } from "./utils";
+import { omit } from "lodash-es";
 
 type Action = ActionType<typeof actions>;
 
@@ -114,7 +115,101 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
     };
   })
   .handleAction(actions.removeRow, (state, { payload: { rowId } }) => {
+    const rowToDelete = state.rows[rowId - 1];
+    const mergeInfo: {
+      parentCols: ColType[];
+      resourceFor: string[];
+    } = {
+      parentCols: [],
+      resourceFor: [],
+    };
+
+    rowToDelete.cols.forEach((col: ColType) => {
+      if (col.resourceFor) {
+        const resourceForId = `${col.resourceFor.rowId}-${col.resourceFor.colId}`;
+        if (
+          !mergeInfo.resourceFor.includes(resourceForId) &&
+          col.resourceFor.rowId !== rowId
+        ) {
+          mergeInfo.resourceFor.push(resourceForId);
+        }
+      }
+
+      if (col.resources) {
+        mergeInfo.parentCols.push(col);
+      }
+    });
+
     const newRows = state.rows;
+
+    if (mergeInfo.resourceFor.length > 0) {
+      mergeInfo.resourceFor.forEach((id: string) => {
+        const ids = id.split("-");
+        const parentRowId = +ids[0];
+        const parentColId = +ids[1];
+        const parent = newRows[parentRowId - 1].cols[parentColId - 1];
+
+        if (parent.rowSpan && parent.rowSpan > 2 && parent.resources) {
+          newRows[parentRowId - 1].cols[parentColId - 1].rowSpan =
+            parent.rowSpan - 1;
+          newRows[parentRowId - 1].cols[
+            parentColId - 1
+          ].resources = parent.resources.reduce((acc, item) => {
+            if (item.rowId !== rowId || item.rowId === parentRowId) {
+              (acc as any).push(item);
+            }
+            return acc;
+          }, []);
+        } else {
+          newRows[parentRowId - 1].cols[parentColId - 1] = omit(parent, [
+            "resources",
+            "rowSpan",
+          ]);
+
+          if (parent.colSpan && parent.resources) {
+            newRows[parentRowId - 1].cols[
+              parentColId - 1
+            ].resources = parent.resources.reduce((acc, item) => {
+              if (item.rowId === parentRowId) {
+                (acc as any).push(item);
+              }
+              return acc;
+            }, []);
+          }
+        }
+      });
+    }
+
+    if (mergeInfo.parentCols.length > 0) {
+      mergeInfo.parentCols.forEach((oldParent: any) => {
+        if (oldParent.rowSpan) {
+          const newParentColId = oldParent.id;
+          const newParentRowId = rowId + 1;
+          const isDoubleRow = oldParent.rowSpan === 2;
+
+          (newRows[newParentRowId - 1].cols[newParentColId - 1] as any) = {
+            ...omit(oldParent, [
+              "resourceFor",
+              ...(isDoubleRow ? ["resources", "rowSpan"] : []),
+            ]),
+            display: true,
+            ...(!isDoubleRow
+              ? {
+                  resources: oldParent.resources.slice(
+                    0,
+                    oldParent.resources.length - (oldParent.colSpan || 1)
+                  ),
+                }
+              : {}),
+            ...(oldParent.rowSpan && !isDoubleRow
+              ? { rowSpan: oldParent.rowSpan - 1 }
+              : {}),
+            ...(oldParent.colSpan ? { colSpan: oldParent.colSpan } : {}),
+          };
+        }
+      });
+    }
+
     newRows.splice(rowId - 1, 1);
 
     return {
