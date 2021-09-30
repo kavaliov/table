@@ -138,12 +138,12 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
 
         newRows[rowId].cols[colIndex] = {
           ...omit(colToDelete, ["rowSpan", "resources"]),
-          ...(colToDelete.colSpan && colToDelete.rowSpan > 2
+          ...(colToDelete.rowSpan && colToDelete.rowSpan > 2
             ? { rowSpan: colToDelete.rowSpan - 1 }
             : {}),
         };
 
-        if (newResources.length > 0) {
+        if (newResources.length > 0 && newRows[rowId].cols[colIndex + 1]) {
           newRows[rowId].cols[colIndex + 1].resources = newResources;
         }
       }

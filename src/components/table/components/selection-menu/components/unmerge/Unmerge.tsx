@@ -1,6 +1,6 @@
 import React from "react";
 import { TableContext } from "../../../../duck/context";
-import { getCol } from "../../../../duck/utils";
+import { getCol, isSingleSelection } from "../../../../duck/utils";
 import { unmergeCols } from "./duck/operations";
 
 const Unmerge: React.FC = () => {
@@ -15,7 +15,10 @@ const Unmerge: React.FC = () => {
     const selectionState = state.selectionState.start;
     if (selectionState) {
       const selectedCol = getCol(state.rows, selectionState);
-      if (selectedCol.colSpan || selectedCol.rowSpan) {
+      if (
+        (selectedCol.colSpan || selectedCol.rowSpan) &&
+        isSingleSelection(state.selectionState)
+      ) {
         setCanUnmerged(true);
       }
     }

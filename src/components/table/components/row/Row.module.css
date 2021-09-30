@@ -17,3 +17,23 @@
     background: #c8dbff;
   }
 }
+
+.selectArea {
+  position: absolute;
+  top: 0;
+  left: 10px;
+  height: calc(100% + 1px);
+  z-index: 3;
+  border: 2px dashed #ff321e;
+  box-sizing: border-box;
+  animation: blinker 0.5s linear;
+}
+
+@keyframes blinker {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

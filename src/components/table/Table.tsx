@@ -19,7 +19,7 @@ const Table: React.FC<TableType> = ({ onChange }) => {
       onChange(state.rows);
     }
 
-    console.log(state.selectionState, "rows state");
+    console.log(state.rows, "rows state");
   }, [state, onChange]);
 
   return (
