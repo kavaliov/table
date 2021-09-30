@@ -203,7 +203,7 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
         const newCols = row.cols.map((col: ColType) => {
           const newResources = col.resources?.map((resource) => ({
             ...resource,
-            colId: resource.rowId > rowId ? resource.rowId - 1 : resource.rowId,
+            rowId: resource.rowId > rowId ? resource.rowId - 1 : resource.rowId,
           }));
 
           return {
