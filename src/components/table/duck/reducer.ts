@@ -115,108 +115,82 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
     };
   })
   .handleAction(actions.removeRow, (state, { payload: { rowId } }) => {
-    const rowToDelete = state.rows[rowId - 1];
-    const mergeInfo: {
-      parentCols: ColType[];
-      resourceFor: string[];
-    } = {
-      parentCols: [],
-      resourceFor: [],
-    };
+    const rowToRemove = state.rows[rowId - 1];
+    const newRows = state.rows;
+    const decreasedParent: string[] = [];
 
-    // collecting merge info in removing row
-    rowToDelete.cols.forEach((col: ColType) => {
-      if (col.resourceFor) {
-        const resourceForId = `${col.resourceFor.rowId}-${col.resourceFor.colId}`;
-        if (
-          !mergeInfo.resourceFor.includes(resourceForId) &&
-          col.resourceFor.rowId !== rowId
-        ) {
-          mergeInfo.resourceFor.push(resourceForId);
+    rowToRemove.cols.forEach((colToDelete: ColType, colIndex) => {
+      if (colToDelete.resources && colToDelete.rowSpan) {
+        const { resources } = colToDelete;
+
+        const newResources = resources.reduce(
+          (acc: PositionStateType[], resource, index) => {
+            if (
+              resources[index + 1] &&
+              resource.colId === resources[index + 1].colId
+            ) {
+              acc.push(resource);
+            }
+            return acc;
+          },
+          []
+        );
+
+        newRows[rowId].cols[colIndex] = {
+          ...omit(colToDelete, ["rowSpan", "resources"]),
+          ...(colToDelete.colSpan && colToDelete.rowSpan > 2
+            ? { rowSpan: colToDelete.rowSpan - 1 }
+            : {}),
+        };
+
+        if (newResources.length > 0) {
+          newRows[rowId].cols[colIndex + 1].resources = newResources;
         }
       }
 
-      if (col.resources) {
-        mergeInfo.parentCols.push(col);
+      if (colToDelete.resourceFor && colToDelete.resourceFor.rowId !== rowId) {
+        let parentCol =
+          newRows[colToDelete.resourceFor.rowId - 1].cols[
+            colToDelete.resourceFor.colId - 1
+          ];
+
+        const parentId = `${colToDelete.resourceFor.rowId}-${colToDelete.resourceFor.colId}`;
+
+        if (!decreasedParent.includes(parentId)) {
+          decreasedParent.push(parentId);
+          const newRowSpan = (parentCol.rowSpan || 1) - 1;
+          const newResources = parentCol.resources?.slice(
+            0,
+            parentCol.resources.length - (parentCol.colSpan || 1)
+          );
+
+          if (newRowSpan > 1) {
+            newRows[colToDelete.resourceFor.rowId - 1].cols[
+              colToDelete.resourceFor.colId - 1
+            ].rowSpan = newRowSpan;
+          } else {
+            parentCol = omit(parentCol, ["rowSpan"]);
+
+            newRows[colToDelete.resourceFor.rowId - 1].cols[
+              colToDelete.resourceFor.colId - 1
+            ] = parentCol;
+          }
+
+          if (newResources && newResources.length > 0) {
+            newRows[colToDelete.resourceFor.rowId - 1].cols[
+              colToDelete.resourceFor.colId - 1
+            ].resources = newResources;
+          } else {
+            parentCol = omit(parentCol, ["resources"]);
+
+            newRows[colToDelete.resourceFor.rowId - 1].cols[
+              colToDelete.resourceFor.colId - 1
+            ] = parentCol;
+          }
+        }
       }
     });
 
-    const newRows = state.rows;
-
-    // update parent col
-    if (mergeInfo.resourceFor.length > 0) {
-      mergeInfo.resourceFor.forEach((id: string) => {
-        const ids = id.split("-");
-        const parentRowId = +ids[0];
-        const parentColId = +ids[1];
-        const parent = newRows[parentRowId - 1].cols[parentColId - 1];
-
-        if (parent.rowSpan && parent.rowSpan > 2 && parent.resources) {
-          newRows[parentRowId - 1].cols[parentColId - 1].rowSpan =
-            parent.rowSpan - 1;
-          newRows[parentRowId - 1].cols[
-            parentColId - 1
-          ].resources = parent.resources.reduce((acc, item) => {
-            if (item.rowId !== rowId || item.rowId === parentRowId) {
-              (acc as any).push({
-                ...item,
-                ...(item.rowId > rowId ? { rowId: item.rowId - 1 } : {}),
-              });
-            }
-            return acc;
-          }, []);
-        } else {
-          newRows[parentRowId - 1].cols[parentColId - 1] = omit(parent, [
-            "resources",
-            "rowSpan",
-          ]);
-
-          if (parent.colSpan && parent.resources) {
-            newRows[parentRowId - 1].cols[
-              parentColId - 1
-            ].resources = parent.resources.reduce((acc, item) => {
-              if (item.rowId === parentRowId) {
-                (acc as any).push(item);
-              }
-              return acc;
-            }, []);
-          }
-        }
-      });
-    }
-
-    // update resources
-    if (mergeInfo.parentCols.length > 0) {
-      mergeInfo.parentCols.forEach((oldParent: any) => {
-        if (oldParent.rowSpan) {
-          const newParentColId = oldParent.id;
-          const newParentRowId = rowId + 1;
-          const isDoubleRow = oldParent.rowSpan === 2;
-
-          (newRows[newParentRowId - 1].cols[newParentColId - 1] as any) = {
-            ...omit(oldParent, [
-              "resourceFor",
-              ...(isDoubleRow ? ["resources", "rowSpan"] : []),
-            ]),
-            display: true,
-            ...(!isDoubleRow
-              ? {
-                  resources: oldParent.resources.slice(
-                    0,
-                    oldParent.resources.length - (oldParent.colSpan || 1)
-                  ),
-                }
-              : {}),
-            ...(oldParent.rowSpan && !isDoubleRow
-              ? { rowSpan: oldParent.rowSpan - 1 }
-              : {}),
-            ...(oldParent.colSpan ? { colSpan: oldParent.colSpan } : {}),
-          };
-        }
-      });
-    }
-
-    // remove selected row
     newRows.splice(rowId - 1, 1);
 
     return {
@@ -225,10 +199,33 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
         selectedCols: [],
         selected: false,
       },
-      rows: newRows.map((row: RowType, index: number) => ({
-        ...row,
-        id: index + 1,
-      })),
+      rows: newRows.map((row: RowType, index: number) => {
+        const newCols = row.cols.map((col: ColType) => {
+          const newResources = col.resources?.map((resource) => ({
+            ...resource,
+            colId: resource.rowId > rowId ? resource.rowId - 1 : resource.rowId,
+          }));
+
+          return {
+            ...col,
+            ...(newResources ? { resources: newResources } : {}),
+            ...(col.resourceFor && col.resourceFor.rowId > rowId
+              ? {
+                  resourceFor: {
+                    ...col.resourceFor,
+                    rowId: col.resourceFor.rowId - 1,
+                  },
+                }
+              : {}),
+          };
+        });
+
+        return {
+          ...row,
+          id: index + 1,
+          cols: newCols,
+        };
+      }),
     };
   })
   .handleAction(actions.removeCol, (state, { payload: { colId } }) => {

@@ -1,4 +1,10 @@
-import { PositionStateType, RangeType, SelectionStateType } from "./types";
+import {
+  ColType,
+  PositionStateType,
+  RangeType,
+  RowType,
+  SelectionStateType,
+} from "./types";
 
 export const getRange = (
   start: PositionStateType,
@@ -74,3 +80,6 @@ export const intersects = (
     return "not";
   }
 };
+
+export const getCol = (rows: RowType[], position: PositionStateType): ColType =>
+  rows[position.rowId - 1].cols[position.colId - 1];

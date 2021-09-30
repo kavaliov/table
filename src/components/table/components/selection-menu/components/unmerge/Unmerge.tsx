@@ -1,23 +1,29 @@
 import React from "react";
 import { TableContext } from "../../../../duck/context";
+import { getCol } from "../../../../duck/utils";
 import { unmergeCols } from "./duck/operations";
-import { isSingleSelection } from "../../../../duck/utils";
 
 const Unmerge: React.FC = () => {
   const { state, dispatch } = React.useContext(TableContext);
+  const [canUnmerged, setCanUnmerged] = React.useState(false);
 
   const unmergeHandler = () => {
     unmergeCols(state, dispatch);
   };
 
+  React.useEffect(() => {
+    const selectionState = state.selectionState.start;
+    if (selectionState) {
+      const selectedCol = getCol(state.rows, selectionState);
+      if (selectedCol.colSpan || selectedCol.rowSpan) {
+        setCanUnmerged(true);
+      }
+    }
+  }, [state]);
+
   return (
     <li>
-      <button
-        disabled={
-          !(isSingleSelection(state.selectionState))
-        }
-        onClick={unmergeHandler}
-      >
+      <button disabled={!canUnmerged} onClick={unmergeHandler}>
         Unmerge
       </button>
     </li>
