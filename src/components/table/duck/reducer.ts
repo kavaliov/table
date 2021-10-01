@@ -123,17 +123,9 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
       if (colToDelete.resources && colToDelete.rowSpan) {
         const { resources } = colToDelete;
 
-        const newResources = resources.reduce(
-          (acc: PositionStateType[], resource, index) => {
-            if (
-              resources[index + 1] &&
-              resource.colId === resources[index + 1].colId
-            ) {
-              acc.push(resource);
-            }
-            return acc;
-          },
-          []
+        const newResources = resources?.slice(
+          0,
+          resources.length - (colToDelete.colSpan || 1)
         );
 
         newRows[rowId].cols[colIndex] = {
@@ -143,8 +135,8 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
             : {}),
         };
 
-        if (newResources.length > 0 && newRows[rowId].cols[colIndex + 1]) {
-          newRows[rowId].cols[colIndex + 1].resources = newResources;
+        if (newResources.length > 0 && newRows[rowId].cols[colIndex]) {
+          newRows[rowId].cols[colIndex].resources = newResources;
         }
       }
 
@@ -201,14 +193,8 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
       },
       rows: newRows.map((row: RowType, index: number) => {
         const newCols = row.cols.map((col: ColType) => {
-          const newResources = col.resources?.map((resource) => ({
-            ...resource,
-            rowId: resource.rowId > rowId ? resource.rowId - 1 : resource.rowId,
-          }));
-
           return {
             ...col,
-            ...(newResources ? { resources: newResources } : {}),
             ...(col.resourceFor && col.resourceFor.rowId > rowId
               ? {
                   resourceFor: {
@@ -239,10 +225,10 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
         const { resources } = colToDelete;
 
         const newResources = resources.reduce(
-          (acc: PositionStateType[], resource, index) => {
+          (acc: PositionStateType[], resource) => {
             if (
-              resources[index + 1] &&
-              resource.rowId === resources[index + 1].rowId
+              resource.colId !==
+              colToDelete.id + (colToDelete.colSpan || 0) - 1
             ) {
               acc.push(resource);
             }
@@ -276,10 +262,7 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
           const newColSpan = (parentCol.colSpan || 1) - 1;
           const newResources = parentCol.resources?.reduce(
             (acc: PositionStateType[], item) => {
-              if (
-                item.colId !== colToDelete.id &&
-                item.rowId !== rowIndex + 1
-              ) {
+              if (item.colId !== parentCol.id + (parentCol.colSpan || 0) - 1) {
                 acc.push(item);
               }
               return acc;
@@ -331,14 +314,8 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
       },
       rows: newRows.map((row: RowType, index: number) => {
         const newCols = row.cols.map((col: ColType) => {
-          const newResources = col.resources?.map((resource) => ({
-            ...resource,
-            colId: resource.colId > colId ? resource.colId - 1 : resource.colId,
-          }));
-
           return {
             ...col,
-            ...(newResources ? { resources: newResources } : {}),
             ...(col.resourceFor && col.resourceFor.colId > colId
               ? {
                   resourceFor: {
