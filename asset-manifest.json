@@ -1,22 +1,29 @@
 {
   "files": {
-    "main.css": "/table/static/css/main.535f221e.chunk.css",
-    "main.js": "/table/static/js/main.e810dbb8.chunk.js",
-    "main.js.map": "/table/static/js/main.e810dbb8.chunk.js.map",
+    "main.css": "/table/static/css/main.eab2a6a3.chunk.css",
+    "main.js": "/table/static/js/main.c681d005.chunk.js",
+    "main.js.map": "/table/static/js/main.c681d005.chunk.js.map",
     "runtime-main.js": "/table/static/js/runtime-main.f07036ef.js",
     "runtime-main.js.map": "/table/static/js/runtime-main.f07036ef.js.map",
-    "static/js/2.17a52ce6.chunk.js": "/table/static/js/2.17a52ce6.chunk.js",
-    "static/js/2.17a52ce6.chunk.js.map": "/table/static/js/2.17a52ce6.chunk.js.map",
+    "static/css/2.e426f036.chunk.css": "/table/static/css/2.e426f036.chunk.css",
+    "static/js/2.1d974718.chunk.js": "/table/static/js/2.1d974718.chunk.js",
+    "static/js/2.1d974718.chunk.js.map": "/table/static/js/2.1d974718.chunk.js.map",
     "index.html": "/table/index.html",
-    "static/css/main.535f221e.chunk.css.map": "/table/static/css/main.535f221e.chunk.css.map",
-    "static/js/2.17a52ce6.chunk.js.LICENSE.txt": "/table/static/js/2.17a52ce6.chunk.js.LICENSE.txt",
+    "static/css/2.e426f036.chunk.css.map": "/table/static/css/2.e426f036.chunk.css.map",
+    "static/css/main.eab2a6a3.chunk.css.map": "/table/static/css/main.eab2a6a3.chunk.css.map",
+    "static/js/2.1d974718.chunk.js.LICENSE.txt": "/table/static/js/2.1d974718.chunk.js.LICENSE.txt",
+    "static/media/bold.aaa73dad.svg": "/table/static/media/bold.aaa73dad.svg",
     "static/media/close-circle.50ed0904.svg": "/table/static/media/close-circle.50ed0904.svg",
-    "static/media/setting.5524b19c.svg": "/table/static/media/setting.5524b19c.svg"
+    "static/media/italic.8e03cb99.svg": "/table/static/media/italic.8e03cb99.svg",
+    "static/media/setting.5524b19c.svg": "/table/static/media/setting.5524b19c.svg",
+    "static/media/underline.037f1cd5.svg": "/table/static/media/underline.037f1cd5.svg",
+    "static/media/unordered-list.d3b3a77e.svg": "/table/static/media/unordered-list.d3b3a77e.svg"
   },
   "entrypoints": [
     "static/js/runtime-main.f07036ef.js",
-    "static/js/2.17a52ce6.chunk.js",
-    "static/css/main.535f221e.chunk.css",
-    "static/js/main.e810dbb8.chunk.js"
+    "static/css/2.e426f036.chunk.css",
+    "static/js/2.1d974718.chunk.js",
+    "static/css/main.eab2a6a3.chunk.css",
+    "static/js/main.c681d005.chunk.js"
   ]
 }
