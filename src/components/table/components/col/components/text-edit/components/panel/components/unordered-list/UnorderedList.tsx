@@ -1,0 +1,46 @@
+import React from "react";
+import { EditorState, RichUtils } from "draft-js";
+import Button from "../../../../../../../button";
+import icon from "./unordered-list.svg";
+
+interface UnorderedListType {
+  editorState: EditorState;
+  setEditorState: React.Dispatch<React.SetStateAction<EditorState>>;
+}
+
+const UnorderedList: React.FC<UnorderedListType> = ({
+  setEditorState,
+  editorState,
+}) => {
+  const [unordered, setUnordered] = React.useState(false);
+
+  React.useEffect(() => {
+    const selection = editorState.getSelection();
+    const blockType = editorState
+      .getCurrentContent()
+      .getBlockForKey(selection.getStartKey())
+      .getType();
+
+    setUnordered(blockType === "unordered-list-item");
+  }, [editorState]);
+
+  const listHandler = (e: any) => {
+    e.preventDefault();
+    setEditorState(
+      RichUtils.toggleBlockType(editorState, "unordered-list-item")
+    );
+  };
+
+  return (
+    <Button
+      onMouseDown={(e) => e.preventDefault()}
+      active={unordered}
+      small
+      onClick={listHandler}
+    >
+      <img src={icon} alt="" />
+    </Button>
+  );
+};
+
+export default UnorderedList;

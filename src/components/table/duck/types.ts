@@ -40,10 +40,11 @@ export interface ColType {
   id: number;
   type: string;
   display: boolean;
-  content: string;
+  content: any;
   resourceFor?: PositionStateType;
   resources?: PositionStateType[];
   background?: string;
+  width?: number;
   rowSpan?: number;
   colSpan?: number;
 }

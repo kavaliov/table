@@ -2,16 +2,27 @@
   border: 1px solid #ccc;
   border-right: 0;
   border-bottom: 0;
-  padding: 4px;
-  white-space: nowrap;
-  box-sizing: border-box;
-  line-height: 1em;
-  text-align: center;
   position: relative;
   font-size: 13px;
+  white-space: pre-wrap;
+  vertical-align: top;
+
+  & > div {
+    min-height: 45px;
+    box-sizing: border-box;
+    padding: 8px;
+  }
+
+  :global(.DraftEditor-editorContainer *) {
+    user-select: none;
+  }
 }
 
 .selected {
   background: aliceblue;
+  border: 1px solid #24a7ff;
+}
+
+.editMode {
   border: 1px solid #24a7ff;
 }

@@ -1,0 +1,24 @@
+.wrapper {
+  position: absolute;
+  display: flex;
+  left: 50%;
+  top: 0;
+  padding: 4px;
+  background: #d5e4ff;
+  transform: translate(-50%, -100%);
+  border-radius: 4px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.38);
+  z-index: 1;
+
+  button {
+    margin-right: 4px;
+
+    img {
+      width: 14px;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

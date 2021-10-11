@@ -2,6 +2,7 @@
   gap: 5px;
   position: absolute;
   display: none;
+  z-index: 10;
 
   &.selected {
     display: flex;

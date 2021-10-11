@@ -3,7 +3,6 @@ import OutsideClickHandler from "react-outside-click-handler";
 import { RowType as RowDataType, ColType } from "../../duck/types";
 import { TableContext } from "../../duck/context";
 import { clearSelection } from "../../duck/actions";
-import { ROW_HEIGHT } from "../../duck/constants";
 import Col from "../col";
 import { AddRow, RemoveRow } from "./components";
 import styles from "./Row.module.css";
@@ -32,7 +31,7 @@ const Row: React.FC<RowType> = ({ rowData }) => {
   };
 
   return (
-    <tr style={{ height: rowData.height || ROW_HEIGHT }}>
+    <tr>
       <td ref={tdRef} className={styles.techCol} onClick={selectRowHandler}>
         <AddRow rowId={rowData.id} />
         {rowSelected && state.rows.length > 1 && (

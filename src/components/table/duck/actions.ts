@@ -23,7 +23,7 @@ export const updateColContent = createStandardAction(
 )<{
   rowId: number;
   colId: number;
-  content: string;
+  content: any;
 }>();
 
 export const updateColBackground = createStandardAction(
@@ -43,6 +43,11 @@ export const removeRow = createStandardAction("TABLE/REMOVE_ROW")<{
 
 export const selectCol = createStandardAction("TABLE/SELECT_COL")<{
   colId: number;
+}>();
+
+export const setColWidth = createStandardAction("TABLE/SET_COL_WIDTH")<{
+  colId: number;
+  width: number;
 }>();
 
 export const removeCol = createStandardAction("TABLE/REMOVE_COL")<{

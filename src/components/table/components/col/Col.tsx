@@ -2,7 +2,11 @@ import React from "react";
 import classNames from "classnames";
 import { ColType as ColDataType, PositionStateType } from "../../duck/types";
 import { TableContext } from "../../duck/context";
-import { setEndSelection, setStartSelection } from "../../duck/actions";
+import {
+  clearSelection,
+  setEndSelection,
+  setStartSelection,
+} from "../../duck/actions";
 import { belongs } from "../../duck/utils";
 import { TextEdit } from "./components";
 import styles from "./Col.module.css";
@@ -54,11 +58,11 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
   }
 
   const selectStartHandler = () => {
-    if (!state.touched) {
+    if (!state.touched && !editMode) {
       dispatch(
         setStartSelection({ positionStart: { rowId, colId: colData.id } })
       );
-    } else {
+    } else if (!editMode) {
       dispatch(
         setEndSelection({
           positionEnd,
@@ -69,16 +73,18 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
   };
 
   const selectEndHandler = () => {
-    dispatch(
-      setEndSelection({
-        positionEnd,
-        finished: true,
-      })
-    );
+    if (!editMode) {
+      dispatch(
+        setEndSelection({
+          positionEnd,
+          finished: true,
+        })
+      );
+    }
   };
 
   const selectUpdateHandler = () => {
-    if (state.touched) {
+    if (state.touched && !editMode) {
       dispatch(
         setEndSelection({
           positionEnd: { rowId, colId: colData.id },
@@ -88,28 +94,36 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
     }
   };
 
+  const doubleClickHandler = () => {
+    dispatch(clearSelection());
+    setEditMode(true);
+  };
+
   return (
     <td
       id={`col-${rowId}-${colData.id}`}
       onMouseDown={selectStartHandler}
       onMouseUp={selectEndHandler}
       onMouseEnter={selectUpdateHandler}
-      onDoubleClick={() => setEditMode(true)}
+      onDoubleClick={doubleClickHandler}
       colSpan={colData.colSpan}
       rowSpan={colData.rowSpan}
-      className={classNames(styles.wrapper, { [styles.selected]: selected })}
+      className={classNames(styles.wrapper, {
+        [styles.selected]: selected,
+        [styles.editMode]: editMode,
+      })}
       style={{ background: colData.background }}
     >
-      {editMode && colData.type === "text" && (
+      {colData.type === "text" && (
         <TextEdit
           value={colData.content}
           background={colData.background}
           rowId={rowId}
           colId={colData.id}
+          editMode={editMode}
           setEditMode={setEditMode}
         />
       )}
-      {!editMode && colData.content}
     </td>
   );
 };

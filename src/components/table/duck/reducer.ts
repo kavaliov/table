@@ -314,8 +314,14 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
       },
       rows: newRows.map((row: RowType, index: number) => {
         const newCols = row.cols.map((col: ColType) => {
+          const newResources = col.resources?.map((resource) => ({
+            ...resource,
+            colId: resource.colId > colId ? resource.colId - 1 : resource.colId,
+          }));
+
           return {
             ...col,
+            ...(newResources ? { resources: newResources } : {}),
             ...(col.resourceFor && col.resourceFor.colId > colId
               ? {
                   resourceFor: {
@@ -348,6 +354,23 @@ const tableReducer = createReducer<Types.TableState, Action>(initialState)
       };
     }
   )
+  .handleAction(actions.setColWidth, (state, { payload: { colId, width } }) => {
+    const { rows } = state;
+
+    const newRows = rows.map((row) => {
+      const newCols = row.cols.map((col: ColType) => ({
+        ...col,
+        ...(col.id === colId ? { width } : {}),
+      }));
+
+      return { ...row, cols: newCols };
+    });
+
+    return {
+      ...state,
+      rows: newRows,
+    };
+  })
   .handleAction(
     actions.updateColBackground,
     (state, { payload: { selectionState, background } }) => {

@@ -4,6 +4,7 @@ import { TableContext } from "../../../../duck/context";
 import { clearSelection } from "../../../../duck/actions";
 import AddCol from "../add-col";
 import RemoveCol from "../remove-col";
+import ChangeWidth from "../change-width";
 import styles from "./TechCol.module.css";
 
 interface TechColType {
@@ -14,15 +15,10 @@ const TechCol: React.FC<TechColType> = ({ colId }) => {
   const { state, dispatch } = React.useContext(TableContext);
   const [colSelected, setColSelected] = React.useState(false);
   const [height, setHeight] = React.useState(0);
-  const tdRef = React.useRef<HTMLTableDataCellElement>(null);
 
   const selectColHandler = () => {
     dispatch(clearSelection());
     setColSelected(true);
-
-    if (tdRef.current) {
-      setHeight((tdRef.current.closest("table")?.offsetHeight || 0) - 12);
-    }
   };
 
   const outsideClickHandler = () => {
@@ -30,8 +26,21 @@ const TechCol: React.FC<TechColType> = ({ colId }) => {
   };
 
   return (
-    <td ref={tdRef} onClick={selectColHandler} className={styles.techCol}>
+    <td
+      ref={(td: HTMLTableDataCellElement) =>
+        setHeight((td?.closest("table")?.offsetHeight || 0) - 12)
+      }
+      onClick={selectColHandler}
+      className={styles.techCol}
+      style={{
+        width:
+          state.rows[0].cols.length > 1
+            ? state.rows[0].cols[colId - 1]?.width
+            : "auto",
+      }}
+    >
       <AddCol colId={colId} />
+      <ChangeWidth tableHeight={height} colId={colId} />
       {state.rows[0].cols.length > 1 && colSelected && (
         <>
           <div className={styles.selectArea} style={{ height }} />
