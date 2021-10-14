@@ -4,3 +4,6 @@ export { default as Underline } from "./underline";
 export { default as UnorderedList } from "./unordered-list";
 export { default as OrderedList } from "./ordered-list";
 export { default as Headers } from "./headers";
+export { default as AlignRight } from "./align-right";
+export { default as AlignLeft } from "./align-left";
+export { default as AlignCenter } from "./align-center";

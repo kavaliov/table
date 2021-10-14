@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { TableContext } from "../../../../duck/context";
-import { clearSelection, setColWidth } from "../../../../duck/actions";
+import { tableStateActions, rowsStateActions } from "../../../../duck/actions";
 import styles from "./ChangeWidth.module.css";
 
 interface ChangeWidthType {
@@ -9,7 +9,9 @@ interface ChangeWidthType {
 }
 
 const ChangeWidth: React.FC<ChangeWidthType> = ({ tableHeight, colId }) => {
-  const { state, dispatch } = React.useContext(TableContext);
+  const { rowsState, dispatchTableState, dispatchRowsState } = React.useContext(
+    TableContext
+  );
   const [pressed, setPressed] = useState<boolean>(false);
   const [width, setWidth] = useState<number>(0);
   const [start, setStart] = useState<number>(0);
@@ -17,7 +19,7 @@ const ChangeWidth: React.FC<ChangeWidthType> = ({ tableHeight, colId }) => {
 
   const onMouseDownHandler = (e: any) => {
     e.stopPropagation();
-    dispatch(clearSelection());
+    dispatchTableState(tableStateActions.clearSelection());
     setPressed(true);
     setStart(e.screenX + right);
   };
@@ -25,7 +27,9 @@ const ChangeWidth: React.FC<ChangeWidthType> = ({ tableHeight, colId }) => {
   const onUpHandler = (e: any) => {
     e.stopPropagation();
     if (pressed) {
-      dispatch(setColWidth({ colId, width: width - right }));
+      dispatchRowsState(
+        rowsStateActions.setColWidth({ colId, width: width - right })
+      );
       setRight(0);
       setPressed(false);
     }
@@ -39,7 +43,7 @@ const ChangeWidth: React.FC<ChangeWidthType> = ({ tableHeight, colId }) => {
     }
   };
 
-  if (state.rows[0].cols.length === colId) {
+  if (rowsState[0].cols.length === colId) {
     return null;
   }
 

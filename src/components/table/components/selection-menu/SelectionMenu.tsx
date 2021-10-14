@@ -9,24 +9,33 @@ import icon from "./assets/setting.svg";
 import styles from "./SelectionMenu.module.css";
 
 const SelectionMenu: React.FC = () => {
-  const { state } = React.useContext(TableContext);
+  const { tableState } = React.useContext(TableContext);
   const [position, setPosition] = React.useState<PositionType>();
   const [opened, setOpened] = React.useState<boolean>(false);
 
   React.useEffect(() => {
-    if (state.selectionState.start && state.selectionState.end) {
+    if (tableState.selectionState.start && tableState.selectionState.end) {
       setPosition(
-        getMenuPosition(state.selectionState.start, state.selectionState.end)
+        getMenuPosition(
+          tableState.selectionState.start,
+          tableState.selectionState.end
+        )
       );
     }
-  }, [state]);
+  }, [tableState]);
+
+  const outsideClickHandler = () => {
+    if (opened) {
+      setOpened(false);
+    }
+  };
 
   return (
     <div
       className={classNames(styles.wrapper, {
         [styles.selected]:
-          state.selectionState.selected &&
-          state.selectionState.selectedCols.length > 0,
+          tableState.selectionState.selected &&
+          tableState.selectionState.selectedCols.length > 0,
       })}
       style={position}
     >
@@ -37,7 +46,7 @@ const SelectionMenu: React.FC = () => {
         <img src={icon} alt="" />
       </Button>
       {opened && (
-        <OutsideClickHandler onOutsideClick={() => setOpened(false)}>
+        <OutsideClickHandler onOutsideClick={outsideClickHandler}>
           <ul className={styles.menu}>
             <ChangeBackground />
             <Merge />

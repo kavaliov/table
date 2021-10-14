@@ -3,18 +3,15 @@ import { TableContext } from "../../../../duck/context";
 import { mergeAvailable, mergeCols } from "./duck/operations";
 
 const Merge: React.FC = () => {
-  const { state, dispatch } = React.useContext(TableContext);
+  const context = React.useContext(TableContext);
 
   const mergeHandler = () => {
-    mergeCols(state, dispatch);
+    mergeCols(context);
   };
 
   return (
     <li>
-      <button
-        disabled={!mergeAvailable(state)}
-        onClick={mergeHandler}
-      >
+      <button disabled={!mergeAvailable(context)} onClick={mergeHandler}>
         Merge
       </button>
     </li>

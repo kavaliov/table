@@ -1,22 +1,25 @@
 import { omit } from "lodash-es";
 import {
-  AnyDispatch,
   ColType,
   PositionStateType,
   RangeType,
   RowType,
   SelectedColsType,
-  TableState,
+  TableContext,
 } from "../../../../../duck/types";
 import {
   belongs,
   intersects,
   isSingleSelection,
 } from "../../../../../duck/utils";
-import { clearSelection, rowsUpdate } from "../../../../../duck/actions";
+import {
+  rowsStateActions,
+  tableStateActions,
+} from "../../../../../duck/actions";
 
-export const mergeCols = (state: TableState, dispatch: AnyDispatch): void => {
-  const { selectionState, rows } = state;
+export const mergeCols = (context: TableContext): void => {
+  const { selectionState } = context.tableState;
+  const rows = context.rowsState;
   const resources: PositionStateType[] = [];
   const { selectedCols } = selectionState;
   const targetCol = {
@@ -92,12 +95,13 @@ export const mergeCols = (state: TableState, dispatch: AnyDispatch): void => {
 
   newRows[targetCol.rowId - 1].cols[targetCol.colId - 1].resources = resources;
 
-  dispatch(rowsUpdate({ rows: newRows }));
-  dispatch(clearSelection());
+  context.dispatchRowsState(rowsStateActions.rowsUpdate({ rows: newRows }));
+  context.dispatchTableState(tableStateActions.clearSelection());
 };
 
-export const mergeAvailable = (state: TableState): boolean => {
-  const { selectionState, rows } = state;
+export const mergeAvailable = (context: TableContext): boolean => {
+  const { selectionState } = context.tableState;
+  const rows = context.rowsState;
   const { selectedCols, start, end } = selectionState;
   const singleSelection = isSingleSelection(selectionState);
   const mergedCols: RangeType[] = [];

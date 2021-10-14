@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 import { Table } from "./components";
 
 function App() {
   return (
     <div className="App">
-      <Table />
+      <Table onChange={(state) => console.log(state)} />
     </div>
   );
 }

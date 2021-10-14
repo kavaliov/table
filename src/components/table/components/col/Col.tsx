@@ -2,11 +2,7 @@ import React from "react";
 import classNames from "classnames";
 import { ColType as ColDataType, PositionStateType } from "../../duck/types";
 import { TableContext } from "../../duck/context";
-import {
-  clearSelection,
-  setEndSelection,
-  setStartSelection,
-} from "../../duck/actions";
+import { tableStateActions } from "../../duck/actions";
 import { belongs } from "../../duck/utils";
 import { TextEdit } from "./components";
 import styles from "./Col.module.css";
@@ -16,22 +12,28 @@ interface ColType {
   rowId: number;
 }
 
-const Col: React.FC<ColType> = ({ colData, rowId }) => {
+const Col: React.FC<ColType> = React.memo(({ colData, rowId }) => {
   const [selected, setSelected] = React.useState<boolean>(false);
   const [editMode, setEditMode] = React.useState<boolean>(false);
   const [positionEnd, setPositionEnd] = React.useState<PositionStateType>({
     rowId: 0,
     colId: 0,
   });
-  const { state, dispatch } = React.useContext(TableContext);
+  const { rowsState, tableState, dispatchTableState } = React.useContext(
+    TableContext
+  );
 
   React.useEffect(() => {
-    if (state.selectionState.start && state.selectionState.end) {
+    if (tableState.selectionState.start && tableState.selectionState.end) {
       setSelected(
-        belongs(state.selectionState.start, state.selectionState.end, {
-          rowId,
-          colId: colData.id,
-        })
+        belongs(
+          tableState.selectionState.start,
+          tableState.selectionState.end,
+          {
+            rowId,
+            colId: colData.id,
+          }
+        )
       );
     } else {
       setSelected(false);
@@ -40,33 +42,36 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
     setPositionEnd({
       rowId:
         colData.rowSpan &&
-        state.selectionState.start &&
-        state.selectionState.start.rowId < rowId
+        tableState.selectionState.start &&
+        tableState.selectionState.start.rowId < rowId
           ? rowId + colData.rowSpan - 1
           : rowId,
       colId:
         colData.colSpan &&
-        state.selectionState.start &&
-        state.selectionState.start.colId < colData.id
+        tableState.selectionState.start &&
+        tableState.selectionState.start.colId < colData.id
           ? colData.id + colData.colSpan - 1
           : colData.id,
     });
-  }, [state, rowId, colData]);
+  }, [tableState, rowId, colData]);
 
   if (!colData.display) {
     return null;
   }
 
   const selectStartHandler = () => {
-    if (!state.touched && !editMode) {
-      dispatch(
-        setStartSelection({ positionStart: { rowId, colId: colData.id } })
+    if (!tableState.touched && !editMode) {
+      dispatchTableState(
+        tableStateActions.setStartSelection({
+          positionStart: { rowId, colId: colData.id },
+        })
       );
     } else if (!editMode) {
-      dispatch(
-        setEndSelection({
+      dispatchTableState(
+        tableStateActions.setEndSelection({
           positionEnd,
           finished: true,
+          rows: rowsState,
         })
       );
     }
@@ -74,28 +79,32 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
 
   const selectEndHandler = () => {
     if (!editMode) {
-      dispatch(
-        setEndSelection({
+      dispatchTableState(
+        tableStateActions.setEndSelection({
           positionEnd,
           finished: true,
+          rows: rowsState,
         })
       );
     }
   };
 
   const selectUpdateHandler = () => {
-    if (state.touched && !editMode) {
-      dispatch(
-        setEndSelection({
+    if (tableState.touched && !editMode) {
+      dispatchTableState(
+        tableStateActions.setEndSelection({
           positionEnd: { rowId, colId: colData.id },
           finished: false,
+          rows: rowsState,
         })
       );
     }
   };
 
   const doubleClickHandler = () => {
-    dispatch(clearSelection());
+    if (tableState.selectionState.selected) {
+      dispatchTableState(tableStateActions.clearSelection());
+    }
     setEditMode(true);
   };
 
@@ -126,6 +135,6 @@ const Col: React.FC<ColType> = ({ colData, rowId }) => {
       )}
     </td>
   );
-};
+});
 
 export default Col;

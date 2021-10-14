@@ -1,6 +1,6 @@
 import React from "react";
 import { TableContext } from "../../../../duck/context";
-import { removeRow } from "../../../../duck/actions";
+import { rowsStateActions } from "../../../../duck/actions";
 import icon from "./assets/close-circle.svg";
 import styles from "./RemoveRow.module.css";
 
@@ -10,11 +10,11 @@ interface RemoveRowType {
 }
 
 const RemoveRow: React.FC<RemoveRowType> = ({ rowId, setRowSelected }) => {
-  const { dispatch } = React.useContext(TableContext);
+  const { dispatchRowsState } = React.useContext(TableContext);
 
   const removeRowHandler = (e: any) => {
     e.stopPropagation();
-    dispatch(removeRow({ rowId }));
+    dispatchRowsState(rowsStateActions.removeRow({ rowId }));
     setRowSelected(false);
   };
 

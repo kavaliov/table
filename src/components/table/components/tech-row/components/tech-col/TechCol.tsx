@@ -1,7 +1,7 @@
 import React from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { TableContext } from "../../../../duck/context";
-import { clearSelection } from "../../../../duck/actions";
+import { tableStateActions } from "../../../../duck/actions";
 import AddCol from "../add-col";
 import RemoveCol from "../remove-col";
 import ChangeWidth from "../change-width";
@@ -12,17 +12,19 @@ interface TechColType {
 }
 
 const TechCol: React.FC<TechColType> = ({ colId }) => {
-  const { state, dispatch } = React.useContext(TableContext);
+  const { rowsState, dispatchTableState } = React.useContext(TableContext);
   const [colSelected, setColSelected] = React.useState(false);
   const [height, setHeight] = React.useState(0);
 
   const selectColHandler = () => {
-    dispatch(clearSelection());
+    dispatchTableState(tableStateActions.clearSelection());
     setColSelected(true);
   };
 
   const outsideClickHandler = () => {
-    setColSelected(false);
+    if (colSelected) {
+      setColSelected(false);
+    }
   };
 
   return (
@@ -34,14 +36,14 @@ const TechCol: React.FC<TechColType> = ({ colId }) => {
       className={styles.techCol}
       style={{
         width:
-          state.rows[0].cols.length > 1
-            ? state.rows[0].cols[colId - 1]?.width
+          rowsState[0].cols.length > 1
+            ? rowsState[0].cols[colId - 1]?.width
             : "auto",
       }}
     >
       <AddCol colId={colId} />
       <ChangeWidth tableHeight={height} colId={colId} />
-      {state.rows[0].cols.length > 1 && colSelected && (
+      {rowsState[0].cols.length > 1 && colSelected && (
         <>
           <div className={styles.selectArea} style={{ height }} />
           <OutsideClickHandler onOutsideClick={outsideClickHandler}>

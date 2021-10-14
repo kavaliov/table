@@ -2,42 +2,39 @@ import React from "react";
 import { EditorState, RichUtils } from "draft-js";
 import Button from "../../../../../../../button";
 import { getBlockType } from "../../../../duck/utils";
-import icon from "./unordered-list.svg";
+import icon from "./align-center.svg";
 
-interface UnorderedListType {
+interface AlignRightType {
   editorState: EditorState;
   setEditorState: React.Dispatch<React.SetStateAction<EditorState>>;
 }
 
-const UnorderedList: React.FC<UnorderedListType> = ({
-  setEditorState,
+const AlignCenter: React.FC<AlignRightType> = ({
   editorState,
+  setEditorState,
 }) => {
-  const [unordered, setUnordered] = React.useState(false);
+  const [right, setRight] = React.useState(false);
 
   React.useEffect(() => {
     const blockType = getBlockType(editorState);
 
-    setUnordered(blockType === "unordered-list-item");
+    setRight(blockType === "center");
   }, [editorState]);
 
-  const listHandler = (e: any) => {
-    e.preventDefault();
-    setEditorState(
-      RichUtils.toggleBlockType(editorState, "unordered-list-item")
-    );
+  const centerHandler = () => {
+    setEditorState(RichUtils.toggleBlockType(editorState, "center"));
   };
 
   return (
     <Button
+      active={right}
       onMouseDown={(e) => e.preventDefault()}
-      active={unordered}
+      onClick={centerHandler}
       small
-      onClick={listHandler}
     >
       <img src={icon} alt="" />
     </Button>
   );
 };
 
-export default UnorderedList;
+export default AlignCenter;

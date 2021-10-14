@@ -2,6 +2,7 @@ import React from "react";
 import { EditorState, RichUtils } from "draft-js";
 import { HEADERS } from "./duck/constants";
 import styles from "./Headers.module.css";
+import { getBlockType } from "../../../../duck/utils";
 
 interface HeadersType {
   editorState: EditorState;
@@ -12,13 +13,7 @@ const Headers: React.FC<HeadersType> = ({ editorState, setEditorState }) => {
   const [type, setType] = React.useState("unstyled");
 
   React.useEffect(() => {
-    const selection = editorState.getSelection();
-    const blockType = editorState
-      .getCurrentContent()
-      .getBlockForKey(selection.getStartKey())
-      .getType();
-
-    setType(blockType);
+    setType(getBlockType(editorState));
   }, [editorState]);
 
   const headerHandler = (e: any) => {

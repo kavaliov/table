@@ -4,25 +4,26 @@ import { getCol, isSingleSelection } from "../../../../duck/utils";
 import { unmergeCols } from "./duck/operations";
 
 const Unmerge: React.FC = () => {
-  const { state, dispatch } = React.useContext(TableContext);
+  const context = React.useContext(TableContext);
   const [canUnmerged, setCanUnmerged] = React.useState(false);
+  const { tableState, rowsState } = context;
 
   const unmergeHandler = () => {
-    unmergeCols(state, dispatch);
+    unmergeCols(context);
   };
 
   React.useEffect(() => {
-    const selectionState = state.selectionState.start;
-    if (selectionState) {
-      const selectedCol = getCol(state.rows, selectionState);
+    const selectionStart = tableState.selectionState.start;
+    if (selectionStart) {
+      const selectedCol = getCol(rowsState, selectionStart);
       if (
         (selectedCol.colSpan || selectedCol.rowSpan) &&
-        isSingleSelection(state.selectionState)
+        isSingleSelection(tableState.selectionState)
       ) {
         setCanUnmerged(true);
       }
     }
-  }, [state]);
+  }, [tableState, rowsState]);
 
   return (
     <li>

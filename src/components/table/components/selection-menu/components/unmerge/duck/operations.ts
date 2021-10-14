@@ -1,13 +1,13 @@
 import { omit } from "lodash-es";
+import { PositionStateType, TableContext } from "../../../../../duck/types";
 import {
-  AnyDispatch,
-  PositionStateType,
-  TableState,
-} from "../../../../../duck/types";
-import { clearSelection, rowsUpdate } from "../../../../../duck/actions";
+  tableStateActions,
+  rowsStateActions,
+} from "../../../../../duck/actions";
 
-export const unmergeCols = (state: TableState, dispatch: AnyDispatch) => {
-  const { selectionState, rows } = state;
+export const unmergeCols = (context: TableContext) => {
+  const { selectionState } = context.tableState;
+  const rows = context.rowsState;
   const unmergeColPosition = selectionState.selectedCols[0];
   const unmergeCol =
     rows[unmergeColPosition.rowId - 1].cols[unmergeColPosition.colId - 1];
@@ -27,6 +27,6 @@ export const unmergeCols = (state: TableState, dispatch: AnyDispatch) => {
     unmergeColPosition.colId - 1
   ] = omit(unmergeCol, ["resources", "colSpan", "rowSpan"]);
 
-  dispatch(rowsUpdate({ rows }));
-  dispatch(clearSelection());
+  context.dispatchRowsState(rowsStateActions.rowsUpdate({ rows }));
+  context.dispatchTableState(tableStateActions.clearSelection());
 };

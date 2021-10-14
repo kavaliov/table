@@ -1,8 +1,9 @@
 import React, { useRef } from "react";
 import OutsideClickHandler from "react-outside-click-handler";
 import { Editor, EditorState, convertToRaw, convertFromRaw } from "draft-js";
-import { updateColContent } from "../../../../duck/actions";
+import { rowsStateActions } from "../../../../duck/actions";
 import { TableContext } from "../../../../duck/context";
+import { getBlockStyle } from "./duck/utils";
 import { Panel } from "./components";
 import styles from "./TextEdit.module.css";
 
@@ -22,7 +23,7 @@ const TextEdit: React.FC<TextEditType> = ({
   editMode,
   setEditMode,
 }) => {
-  const { dispatch } = React.useContext(TableContext);
+  const { dispatchRowsState } = React.useContext(TableContext);
   const editorRef = useRef<Editor>(null);
   const [editorState, setEditorState] = React.useState(
     value
@@ -36,21 +37,28 @@ const TextEdit: React.FC<TextEditType> = ({
     }
   }, [editMode]);
 
-  const editHandler = () => {
-    const contentState = editorState.getCurrentContent();
-    dispatch(
-      updateColContent({ rowId, colId, content: convertToRaw(contentState) })
-    );
-    setEditMode(false);
+  const outsideClickHandler = () => {
+    if (editMode) {
+      const contentState = editorState.getCurrentContent();
+      dispatchRowsState(
+        rowsStateActions.updateColContent({
+          rowId,
+          colId,
+          content: convertToRaw(contentState),
+        })
+      );
+      setEditMode(false);
+    }
   };
 
   return (
     <div className={styles.wrapper}>
-      <OutsideClickHandler onOutsideClick={editHandler}>
+      <OutsideClickHandler onOutsideClick={outsideClickHandler}>
         {editMode && (
           <Panel editorState={editorState} setEditorState={setEditorState} />
         )}
         <Editor
+          blockStyleFn={getBlockStyle}
           readOnly={!editMode}
           editorState={editorState}
           onChange={setEditorState}

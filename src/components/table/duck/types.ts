@@ -2,16 +2,19 @@ import React from "react";
 
 export type AnyDispatch = React.Dispatch<any>;
 
-export interface SketchContext {
-  state: TableState;
-  dispatch: AnyDispatch;
+export interface TableContext {
+  tableState: TableState;
+  dispatchTableState: AnyDispatch;
+  rowsState: RowsState;
+  dispatchRowsState: AnyDispatch;
 }
 
 export interface TableState {
   touched: boolean;
   selectionState: SelectionStateType;
-  rows: RowType[];
 }
+
+export type RowsState = RowType[];
 
 export interface SelectionStateType {
   selected: boolean;

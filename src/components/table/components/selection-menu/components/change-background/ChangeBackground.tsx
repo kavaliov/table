@@ -2,16 +2,16 @@ import React from "react";
 import classNames from "classnames";
 import { BACKGROUND_COLORS } from "../../../../duck/constants";
 import { TableContext } from "../../../../duck/context";
-import { updateColBackground } from "../../../../duck/actions";
+import { rowsStateActions } from "../../../../duck/actions";
 import styles from "./ChangeBackground.module.css";
 
 const ChangeBackground: React.FC = () => {
-  const { state, dispatch } = React.useContext(TableContext);
+  const { dispatchRowsState, tableState } = React.useContext(TableContext);
 
   const changeColorHandler = (color: string | undefined) => {
-    dispatch(
-      updateColBackground({
-        selectionState: state.selectionState,
+    dispatchRowsState(
+      rowsStateActions.updateColBackground({
+        selectionState: tableState.selectionState,
         background: color,
       })
     );

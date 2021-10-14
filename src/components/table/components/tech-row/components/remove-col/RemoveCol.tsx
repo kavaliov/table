@@ -1,6 +1,6 @@
 import React from "react";
 import { TableContext } from "../../../../duck/context";
-import { removeCol } from "../../../../duck/actions";
+import { rowsStateActions } from "../../../../duck/actions";
 import icon from "./assets/close-circle.svg";
 import styles from "./RemoveCol.module.css";
 
@@ -10,11 +10,11 @@ interface RemoveColType {
 }
 
 const RemoveCol: React.FC<RemoveColType> = ({ colId, setColSelected }) => {
-  const { dispatch } = React.useContext(TableContext);
+  const { dispatchRowsState } = React.useContext(TableContext);
 
   const removeRowHandler = (e: any) => {
     e.stopPropagation();
-    dispatch(removeCol({ colId }));
+    dispatchRowsState(rowsStateActions.removeCol({ colId }));
     setColSelected(false);
   };
 

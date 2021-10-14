@@ -4,4 +4,16 @@
   box-sizing: border-box;
   border-radius: 0;
   padding: 8px;
+
+  :global(.align-right div) {
+    text-align: right;
+  }
+
+  :global(.align-center div) {
+    text-align: center;
+  }
+
+  :global(.align-left div) {
+    text-align: left;
+  }
 }

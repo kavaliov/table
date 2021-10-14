@@ -4,18 +4,18 @@ import { getColCount } from "./duck/utils";
 import { TechCol } from "./components";
 
 const TechRow: React.FC = () => {
-  const { state } = React.useContext(TableContext);
+  const { rowsState } = React.useContext(TableContext);
   const [cols, setCols] = React.useState<any>([]);
 
   React.useEffect(() => {
     setCols(
-      Array(getColCount(state.rows))
+      Array(getColCount(rowsState))
         .fill({})
         .map((col, index) => ({ ...col, id: index + 1 }))
     );
-  }, [state]);
+  }, [rowsState]);
 
-  if (!state.rows.length) {
+  if (!rowsState.length) {
     return null;
   }
 

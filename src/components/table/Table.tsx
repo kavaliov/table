@@ -1,12 +1,12 @@
 import React from "react";
-import 'draft-js/dist/Draft.css'
+import "draft-js/dist/Draft.css";
 import classNames from "classnames";
 import OutsideClickHandler from "react-outside-click-handler";
 import { TableContext } from "./duck/context";
-import tableState from "./duck/state";
-import tableReducer from "./duck/reducer";
+import { initialTableState, initialRowsState } from "./duck/state";
+import { tableStateReducer, rowsStateReducer } from "./duck/reducer";
 import { RowType } from "./duck/types";
-import { clearSelection } from "./duck/actions";
+import { tableStateActions } from "./duck/actions";
 import { Row, SelectionMenu, TechRow } from "./components";
 import styles from "./Table.module.css";
 
@@ -15,30 +15,41 @@ interface TableType {
 }
 
 const Table: React.FC<TableType> = ({ onChange }) => {
-  const [state, dispatch] = React.useReducer(tableReducer, tableState);
+  const [tableState, dispatchTableState] = React.useReducer(
+    tableStateReducer,
+    initialTableState
+  );
+  const [rowsState, dispatchRowsState] = React.useReducer(
+    rowsStateReducer,
+    initialRowsState
+  );
 
   React.useEffect(() => {
     if (onChange && typeof onChange === "function") {
-      onChange(state.rows);
+      onChange(rowsState);
     }
-  }, [state, onChange]);
+  }, [rowsState, onChange]);
 
   const outsideClickHandler = () => {
-    dispatch(clearSelection());
+    if (tableState.selectionState.selected) {
+      dispatchTableState(tableStateActions.clearSelection());
+    }
   };
 
   return (
-    <TableContext.Provider value={{ dispatch, state }}>
+    <TableContext.Provider
+      value={{ dispatchTableState, tableState, rowsState, dispatchRowsState }}
+    >
       <div className={classNames(styles.wrapper, "notranslate")}>
         <OutsideClickHandler onOutsideClick={outsideClickHandler}>
           <table
             className={classNames(styles.table, {
-              [styles.filled]: !!state.rows.length,
+              [styles.filled]: !!rowsState.length,
             })}
           >
             <tbody>
               <TechRow />
-              {state.rows.map((row: RowType) => (
+              {rowsState.map((row: RowType) => (
                 <Row key={row.id} rowData={row} />
               ))}
             </tbody>

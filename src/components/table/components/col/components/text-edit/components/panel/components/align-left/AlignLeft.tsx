@@ -1,40 +1,40 @@
 import React from "react";
 import { EditorState, RichUtils } from "draft-js";
 import Button from "../../../../../../../button";
-import { getBlockType } from "../../../../duck/utils";
-import icon from "./ordered-list.svg";
+import icon from "./align-left.svg";
+import {getBlockType} from "../../../../duck/utils";
 
-interface UnorderedListType {
+interface AlignRightType {
   editorState: EditorState;
   setEditorState: React.Dispatch<React.SetStateAction<EditorState>>;
 }
 
-const OrderedList: React.FC<UnorderedListType> = ({
-  setEditorState,
+const AlignLeft: React.FC<AlignRightType> = ({
   editorState,
+  setEditorState,
 }) => {
-  const [ordered, setOrdered] = React.useState(false);
+  const [left, setLeft] = React.useState(false);
 
   React.useEffect(() => {
     const blockType = getBlockType(editorState);
 
-    setOrdered(blockType === "ordered-list-item");
+    setLeft(blockType === "left");
   }, [editorState]);
 
-  const listHandler = () => {
-    setEditorState(RichUtils.toggleBlockType(editorState, "ordered-list-item"));
+  const leftHandler = () => {
+    setEditorState(RichUtils.toggleBlockType(editorState, "left"));
   };
 
   return (
     <Button
+      active={left}
       onMouseDown={(e) => e.preventDefault()}
-      active={ordered}
+      onClick={leftHandler}
       small
-      onClick={listHandler}
     >
       <img src={icon} alt="" />
     </Button>
   );
 };
 
-export default OrderedList;
+export default AlignLeft;

@@ -1,6 +1,4 @@
 import * as React from "react";
-import { SketchContext as SketchContextType } from "./types";
+import { TableContext as TableContextType } from "./types";
 
-export const TableContext = React.createContext<SketchContextType>(
-  null as any
-);
+export const TableContext = React.createContext<TableContextType>(null as any);

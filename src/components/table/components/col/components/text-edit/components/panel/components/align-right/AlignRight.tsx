@@ -2,42 +2,39 @@ import React from "react";
 import { EditorState, RichUtils } from "draft-js";
 import Button from "../../../../../../../button";
 import { getBlockType } from "../../../../duck/utils";
-import icon from "./unordered-list.svg";
+import icon from "./align-right.svg";
 
-interface UnorderedListType {
+interface AlignRightType {
   editorState: EditorState;
   setEditorState: React.Dispatch<React.SetStateAction<EditorState>>;
 }
 
-const UnorderedList: React.FC<UnorderedListType> = ({
-  setEditorState,
+const AlignRight: React.FC<AlignRightType> = ({
   editorState,
+  setEditorState,
 }) => {
-  const [unordered, setUnordered] = React.useState(false);
+  const [right, setRight] = React.useState(false);
 
   React.useEffect(() => {
     const blockType = getBlockType(editorState);
 
-    setUnordered(blockType === "unordered-list-item");
+    setRight(blockType === "right");
   }, [editorState]);
 
-  const listHandler = (e: any) => {
-    e.preventDefault();
-    setEditorState(
-      RichUtils.toggleBlockType(editorState, "unordered-list-item")
-    );
+  const rightHandler = () => {
+    setEditorState(RichUtils.toggleBlockType(editorState, "right"));
   };
 
   return (
     <Button
+      active={right}
       onMouseDown={(e) => e.preventDefault()}
-      active={unordered}
+      onClick={rightHandler}
       small
-      onClick={listHandler}
     >
       <img src={icon} alt="" />
     </Button>
   );
 };
 
-export default UnorderedList;
+export default AlignRight;

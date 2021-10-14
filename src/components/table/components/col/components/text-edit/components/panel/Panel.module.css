@@ -22,3 +22,9 @@
     }
   }
 }
+
+.separator {
+  margin: 0 8px 0 4px;
+  width: 1px;
+  background: #a4a4a4;
+}

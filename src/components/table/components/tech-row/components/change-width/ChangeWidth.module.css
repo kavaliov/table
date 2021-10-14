@@ -11,7 +11,7 @@
   &::before {
     content: "";
     display: none;
-    width: 20px;
+    width: 13px;
     height: 100%;
     transform: translateX(-100%);
   }
@@ -19,7 +19,7 @@
   &::after {
     content: "";
     display: none;
-    width: 20px;
+    width: 13px;
     height: 100%;
     transform: translate(8px, -100%);
   }

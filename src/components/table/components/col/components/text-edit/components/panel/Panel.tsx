@@ -7,6 +7,9 @@ import {
   UnorderedList,
   OrderedList,
   Headers,
+  AlignRight,
+  AlignLeft,
+  AlignCenter,
 } from "./components";
 import styles from "./Panel.module.css";
 
@@ -20,8 +23,14 @@ const Panel: React.FC<PanelType> = ({ editorState, setEditorState }) => (
     <Bold editorState={editorState} setEditorState={setEditorState} />
     <Italic editorState={editorState} setEditorState={setEditorState} />
     <Underline editorState={editorState} setEditorState={setEditorState} />
+    <div className={styles.separator} />
+    <AlignLeft editorState={editorState} setEditorState={setEditorState} />
+    <AlignCenter editorState={editorState} setEditorState={setEditorState} />
+    <AlignRight editorState={editorState} setEditorState={setEditorState} />
+    <div className={styles.separator} />
     <UnorderedList editorState={editorState} setEditorState={setEditorState} />
     <OrderedList editorState={editorState} setEditorState={setEditorState} />
+    <div className={styles.separator} />
     <Headers editorState={editorState} setEditorState={setEditorState} />
   </div>
 );

@@ -1,6 +1,6 @@
 import React from "react";
 import { TableContext } from "../../../../duck/context";
-import { rowsUpdate } from "../../../../duck/actions";
+import { rowsStateActions } from "../../../../duck/actions";
 import { generateNewRows } from "./duck/utils";
 import styles from "./AddRow.module.css";
 
@@ -9,11 +9,13 @@ interface AddRowType {
 }
 
 const AddRow: React.FC<AddRowType> = ({ rowId }) => {
-  const { dispatch, state } = React.useContext(TableContext);
+  const { dispatchRowsState, rowsState } = React.useContext(TableContext);
 
   const addNewRowHandler = (e: any) => {
     e.stopPropagation();
-    dispatch(rowsUpdate({ rows: generateNewRows(state.rows, rowId) }));
+    dispatchRowsState(
+      rowsStateActions.rowsUpdate({ rows: generateNewRows(rowsState, rowId) })
+    );
   };
 
   return (

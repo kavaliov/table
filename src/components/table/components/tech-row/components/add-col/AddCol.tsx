@@ -1,6 +1,6 @@
 import React from "react";
 import { TableContext } from "../../../../duck/context";
-import { rowsUpdate } from "../../../../duck/actions";
+import { rowsStateActions } from "../../../../duck/actions";
 import { generateRowsWithNewCol } from "../../duck/utils";
 import styles from "./AddCol.module.css";
 
@@ -9,11 +9,15 @@ interface AddColType {
 }
 
 const AddCol: React.FC<AddColType> = ({ colId }) => {
-  const { dispatch, state } = React.useContext(TableContext);
+  const { rowsState, dispatchRowsState } = React.useContext(TableContext);
 
   const addColHandler = (e: any): void => {
     e.stopPropagation();
-    dispatch(rowsUpdate({ rows: generateRowsWithNewCol(state.rows, colId) }));
+    dispatchRowsState(
+      rowsStateActions.rowsUpdate({
+        rows: generateRowsWithNewCol(rowsState, colId),
+      })
+    );
   };
 
   return (
