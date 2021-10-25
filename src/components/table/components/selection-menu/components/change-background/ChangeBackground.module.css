@@ -4,7 +4,6 @@
   .colors {
     position: absolute;
     width: 0;
-    height: 0;
     overflow: hidden;
     transition: all ease 0.1s;
     display: grid;
@@ -17,32 +16,34 @@
     border-radius: 2px;
     left: 99%;
     top: 0;
+    padding: 10px;
+    opacity: 0;
   }
 
   &:hover {
     .colors {
+      opacity: 1;
       width: 115px;
-      height: 40px;
-      padding: 10px;
     }
   }
-}
 
-.colorButton {
-  min-width: 15px;
-  width: 15px;
-  height: 15px;
-  border: 0;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all ease 0.3s;
+  button.colorButton {
+    min-width: 15px;
+    width: 15px;
+    height: 15px;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all ease 0.3s;
+    padding: 0;
 
-  &:hover {
-    transform: scale(1.8);
-  }
+    &:hover {
+      transform: scale(1.8);
+    }
 
-  &.transparent {
-    background: transparent;
-    border: 1px solid #eaeaea;
+    &.transparent {
+      background: transparent;
+      border: 1px solid #eaeaea;
+    }
   }
 }

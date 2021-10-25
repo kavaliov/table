@@ -2,6 +2,8 @@ import React from "react";
 
 export type AnyDispatch = React.Dispatch<any>;
 
+export type RowsState = RowType[];
+
 export interface TableContext {
   tableState: TableState;
   dispatchTableState: AnyDispatch;
@@ -13,8 +15,6 @@ export interface TableState {
   touched: boolean;
   selectionState: SelectionStateType;
 }
-
-export type RowsState = RowType[];
 
 export interface SelectionStateType {
   selected: boolean;

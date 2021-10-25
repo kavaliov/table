@@ -5,6 +5,10 @@
   border-radius: 0;
   padding: 8px;
 
+  &.editMode {
+    z-index: 19;
+  }
+
   :global(.align-right div) {
     text-align: right;
   }

@@ -1,5 +1,9 @@
 import { createStandardAction } from "typesafe-actions";
-import { PositionStateType, RowType, SelectionStateType } from "./types";
+import {
+  PositionStateType,
+  RowType,
+  SelectionStateType,
+} from "./types";
 
 const setStartSelection = createStandardAction("TABLE/SET_START_SELECTION")<{
   positionStart: PositionStateType;
@@ -40,6 +44,11 @@ const updateColBackground = createStandardAction(
   background: string | undefined;
 }>();
 
+const updateColType = createStandardAction("TABLE/UPDATE_COL_TYPE")<{
+  selectionState: SelectionStateType;
+  type: string;
+}>();
+
 const removeRow = createStandardAction("TABLE/REMOVE_ROW")<{
   rowId: number;
 }>();
@@ -65,6 +74,7 @@ const rowsStateActions = {
   rowsUpdate,
   updateColContent,
   updateColBackground,
+  updateColType,
   removeRow,
   setColWidth,
   removeCol,

@@ -1,7 +1,5 @@
 export const emptyCol = { content: "", type: "text", display: true };
 
-export const ROW_HEIGHT = 45;
-
 export const BACKGROUND_COLORS = [
   "#fff1b8",
   "#ffffb8",

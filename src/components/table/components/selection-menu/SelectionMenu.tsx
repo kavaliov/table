@@ -4,7 +4,7 @@ import OutsideClickHandler from "react-outside-click-handler";
 import { TableContext } from "../../duck/context";
 import Button from "../button";
 import { getMenuPosition, PositionType } from "./duck/utils";
-import { Merge, ChangeBackground, Unmerge } from "./components";
+import { Merge, ChangeBackground, Unmerge, ChangeType } from "./components";
 import icon from "./assets/setting.svg";
 import styles from "./SelectionMenu.module.css";
 
@@ -49,6 +49,7 @@ const SelectionMenu: React.FC = () => {
         <OutsideClickHandler onOutsideClick={outsideClickHandler}>
           <ul className={styles.menu}>
             <ChangeBackground />
+            <ChangeType />
             <Merge />
             <Unmerge />
           </ul>

@@ -1,7 +1,7 @@
-import { createReducer, ActionType } from "typesafe-actions";
+import { ActionType, createReducer } from "typesafe-actions";
 import { omit } from "lodash-es";
-import { initialTableState, initialRowsState } from "./state";
-import { tableStateActions, rowsStateActions } from "./actions";
+import { initialRowsState, initialTableState } from "./state";
+import { rowsStateActions, tableStateActions } from "./actions";
 import * as Types from "./types";
 import { ColType, PositionStateType, RowType, SelectedColsType } from "./types";
 import { belongs, getRange } from "./utils";
@@ -149,6 +149,28 @@ export const rowsStateReducer = createReducer<Types.RowsState, RowsStateAction>(
       })
   )
   .handleAction(
+    rowsStateActions.updateColType,
+    (state, { payload: { selectionState, type } }) =>
+      state.map((row: RowType) => {
+        const newCols = row.cols.map((col: ColType) => {
+          if (
+            selectionState.start &&
+            selectionState.end &&
+            belongs(selectionState.start, selectionState.end, {
+              rowId: row.id,
+              colId: col.id,
+            })
+          ) {
+            return { ...col, type };
+          }
+
+          return col;
+        });
+
+        return { ...row, cols: newCols };
+      })
+  )
+  .handleAction(
     rowsStateActions.setColWidth,
     (state, { payload: { colId, width } }) =>
       state.map((row) => {
@@ -162,11 +184,18 @@ export const rowsStateReducer = createReducer<Types.RowsState, RowsStateAction>(
   )
   .handleAction(
     rowsStateActions.updateColContent,
-    (state, { payload: { colId, rowId, content } }) => {
-      state[rowId - 1].cols[colId - 1].content = content;
-
-      return state;
-    }
+    (state, { payload: { colId, rowId, content } }) =>
+      state.map((row: RowType) => ({
+        ...row,
+        ...(row.id === rowId
+          ? {
+              cols: row.cols.map((col: ColType) => ({
+                ...col,
+                ...(col.id === colId ? { ...col, content } : col),
+              })),
+            }
+          : {}),
+      }))
   )
   .handleAction(rowsStateActions.removeCol, (state, { payload: { colId } }) => {
     const newRows = state;

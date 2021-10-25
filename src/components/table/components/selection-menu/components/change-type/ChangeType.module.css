@@ -1,0 +1,36 @@
+.wrapper {
+  position: relative;
+
+  .types {
+    position: absolute;
+    width: 0;
+    overflow: hidden;
+    transition: all ease 0.1s;
+    z-index: 10;
+    background: white;
+    box-shadow: 0 0 10px 4px #ececec;
+    border-radius: 2px;
+    left: 99%;
+    top: 0;
+    list-style: none;
+    opacity: 0;
+
+    button {
+      display: inline-flex;
+      align-items: center;
+    }
+  }
+
+  &:hover {
+    .types {
+      opacity: 1;
+      width: 115px;
+    }
+  }
+
+  .icon {
+    margin-left: auto;
+    width: 14px;
+  }
+}
+

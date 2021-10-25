@@ -1,13 +1,15 @@
 import React, { useRef } from "react";
+import classNames from "classnames";
 import OutsideClickHandler from "react-outside-click-handler";
 import { Editor, EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import { rowsStateActions } from "../../../../duck/actions";
 import { TableContext } from "../../../../duck/context";
 import { getBlockStyle } from "./duck/utils";
 import { Panel } from "./components";
-import styles from "./TextEdit.module.css";
+import styles from "./Text.module.css";
+import CustomBlock from "./components/custom-blocks";
 
-interface TextEditType {
+interface TextType {
   value: any;
   rowId: number;
   colId: number;
@@ -16,7 +18,7 @@ interface TextEditType {
   setEditMode: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TextEdit: React.FC<TextEditType> = ({
+const Text: React.FC<TextType> = ({
   value,
   colId,
   rowId,
@@ -26,9 +28,7 @@ const TextEdit: React.FC<TextEditType> = ({
   const { dispatchRowsState } = React.useContext(TableContext);
   const editorRef = useRef<Editor>(null);
   const [editorState, setEditorState] = React.useState(
-    value
-      ? EditorState.createWithContent(convertFromRaw(value))
-      : EditorState.createEmpty()
+    EditorState.createEmpty()
   );
 
   React.useEffect(() => {
@@ -36,6 +36,14 @@ const TextEdit: React.FC<TextEditType> = ({
       editorRef.current.focus();
     }
   }, [editMode]);
+
+  React.useEffect(() => {
+    if (value) {
+      setEditorState(EditorState.createWithContent(convertFromRaw(value)));
+    } else {
+      setEditorState(EditorState.createEmpty());
+    }
+  }, [value]);
 
   const outsideClickHandler = () => {
     if (editMode) {
@@ -52,13 +60,25 @@ const TextEdit: React.FC<TextEditType> = ({
   };
 
   return (
-    <div className={styles.wrapper}>
+    <div
+      className={classNames(styles.wrapper, { [styles.editMode]: editMode })}
+    >
       <OutsideClickHandler onOutsideClick={outsideClickHandler}>
         {editMode && (
           <Panel editorState={editorState} setEditorState={setEditorState} />
         )}
         <Editor
           blockStyleFn={getBlockStyle}
+          blockRendererFn={(block) => {
+            if (block.getType() === 'atomic') {
+              return {
+                component: CustomBlock,
+                editable: false,
+              };
+            }
+
+            return null;
+          }}
           readOnly={!editMode}
           editorState={editorState}
           onChange={setEditorState}
@@ -69,4 +89,4 @@ const TextEdit: React.FC<TextEditType> = ({
   );
 };
 
-export default TextEdit;
+export default Text;

@@ -4,7 +4,7 @@ import { Table } from "./components";
 function App() {
   return (
     <div className="App">
-      <Table onChange={(state) => console.log(state)} />
+      <Table />
     </div>
   );
 }

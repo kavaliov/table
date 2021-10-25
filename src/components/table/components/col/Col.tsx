@@ -4,7 +4,7 @@ import { ColType as ColDataType, PositionStateType } from "../../duck/types";
 import { TableContext } from "../../duck/context";
 import { tableStateActions } from "../../duck/actions";
 import { belongs } from "../../duck/utils";
-import { TextEdit } from "./components";
+import { Text } from "./components";
 import styles from "./Col.module.css";
 
 interface ColType {
@@ -124,7 +124,7 @@ const Col: React.FC<ColType> = React.memo(({ colData, rowId }) => {
       style={{ background: colData.background }}
     >
       {colData.type === "text" && (
-        <TextEdit
+        <Text
           value={colData.content}
           background={colData.background}
           rowId={rowId}
