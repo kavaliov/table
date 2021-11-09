@@ -1,7 +1,12 @@
 .wrapper {
   display: flex;
+  position: relative;
 
   img {
     max-width: 100%;
+
+    &.opened {
+      box-shadow: 0 0 0 3px #34a4a0;
+    }
   }
 }

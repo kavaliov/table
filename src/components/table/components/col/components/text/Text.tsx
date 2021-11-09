@@ -5,9 +5,9 @@ import { Editor, EditorState, convertToRaw, convertFromRaw } from "draft-js";
 import { rowsStateActions } from "../../../../duck/actions";
 import { TableContext } from "../../../../duck/context";
 import { getBlockStyle } from "./duck/utils";
-import { Panel } from "./components";
+import { Panel, CustomBlock } from "./components";
+import { TextContext } from "./duck/context";
 import styles from "./Text.module.css";
-import CustomBlock from "./components/custom-blocks";
 
 interface TextType {
   value: any;
@@ -40,6 +40,7 @@ const Text: React.FC<TextType> = ({
   React.useEffect(() => {
     if (value) {
       setEditorState(EditorState.createWithContent(convertFromRaw(value)));
+      console.log(value);
     } else {
       setEditorState(EditorState.createEmpty());
     }
@@ -60,32 +61,42 @@ const Text: React.FC<TextType> = ({
   };
 
   return (
-    <div
-      className={classNames(styles.wrapper, { [styles.editMode]: editMode })}
+    <TextContext.Provider
+      value={{
+        editMode,
+        setEditMode,
+        editorState,
+        setEditorState,
+        editor: editorRef.current,
+      }}
     >
-      <OutsideClickHandler onOutsideClick={outsideClickHandler}>
-        {editMode && (
-          <Panel editorState={editorState} setEditorState={setEditorState} />
-        )}
-        <Editor
-          blockStyleFn={getBlockStyle}
-          blockRendererFn={(block) => {
-            if (block.getType() === 'atomic') {
-              return {
-                component: CustomBlock,
-                editable: false,
-              };
-            }
+      <div
+        className={classNames(styles.wrapper, { [styles.editMode]: editMode })}
+      >
+        <OutsideClickHandler onOutsideClick={outsideClickHandler}>
+          {editMode && (
+            <Panel editorState={editorState} setEditorState={setEditorState} />
+          )}
+          <Editor
+            blockStyleFn={getBlockStyle}
+            blockRendererFn={(block) => {
+              if (block.getType() === "atomic") {
+                return {
+                  component: CustomBlock,
+                  editable: false,
+                };
+              }
 
-            return null;
-          }}
-          readOnly={!editMode}
-          editorState={editorState}
-          onChange={setEditorState}
-          ref={editorRef}
-        />
-      </OutsideClickHandler>
-    </div>
+              return null;
+            }}
+            readOnly={!editMode}
+            editorState={editorState}
+            onChange={setEditorState}
+            ref={editorRef}
+          />
+        </OutsideClickHandler>
+      </div>
+    </TextContext.Provider>
   );
 };
 

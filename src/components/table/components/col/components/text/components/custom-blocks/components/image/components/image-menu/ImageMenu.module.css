@@ -1,0 +1,26 @@
+.wrapper {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  background: white;
+  top: 4px;
+  left: 4px;
+  border-radius: 4px;
+
+  & > button {
+    border-radius: 0;
+    box-shadow: none;
+
+    &:first-child {
+      border-radius: 4px 0 0 4px;
+    }
+
+    &:last-child {
+      border-radius: 0 4px 4px 0;
+    }
+  }
+
+  img {
+    width: 15px;
+  }
+}

@@ -1,0 +1,52 @@
+.wrapper {
+  position: absolute;
+  z-index: 400;
+  width: 200px;
+  background: white;
+  border-radius: 4px;
+  padding: 16px;
+  left: 0;
+  box-shadow: 0 0 5px #d2d2d2;
+
+  .formTitle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 16px;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  input {
+    -webkit-appearance: none;
+    border: 1px solid #dadada;
+    border-radius: 2px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 22px;
+    outline: none;
+    padding: 0 4px;
+    margin-bottom: 12px;
+    font-size: 11px;
+  }
+
+  .buttons {
+    display: flex;
+
+    & > button {
+      flex: 1;
+      box-shadow: none;
+      border: 1px solid #34a4a0;
+      color: #34a4a0;
+    }
+
+    .changeButton {
+      background: #34a4a0;
+      color: white;
+      margin-left: 10px;
+
+      &:hover {
+        background: #47b3af;
+      }
+    }
+  }
+}

@@ -21,7 +21,7 @@ export const getBlockType = (editorState: EditorState): string => {
     .getType();
 };
 
-export const getImageBlob = (fileInput: HTMLInputElement): Promise<string> =>
+export const getImageInfo = (fileInput: HTMLInputElement): Promise<string> =>
   new Promise((resolve, reject) => {
     const { files } = fileInput;
     const reader = new FileReader();
@@ -29,6 +29,9 @@ export const getImageBlob = (fileInput: HTMLInputElement): Promise<string> =>
       reader.readAsDataURL(files[0]);
     }
 
-    reader.onload = () => resolve(reader.result as string);
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+
     reader.onerror = (error) => reject(error);
   });

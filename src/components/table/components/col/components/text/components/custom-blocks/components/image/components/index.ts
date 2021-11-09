@@ -1,0 +1,1 @@
+export { default as ImageMenu } from "./image-menu";

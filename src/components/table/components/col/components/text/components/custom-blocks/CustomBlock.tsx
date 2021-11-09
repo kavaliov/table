@@ -16,7 +16,7 @@ const CustomBlock: React.FC<CustomBlockType> = ({ contentState, block }) => {
     const type = entity.getType();
 
     if (type === "IMAGE") {
-      return <Image entity={entity} />;
+      return <Image entity={entity} block={block} />;
     }
   }
 

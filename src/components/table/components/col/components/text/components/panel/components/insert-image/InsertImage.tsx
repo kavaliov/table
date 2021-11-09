@@ -2,7 +2,7 @@ import React from "react";
 import icon from "./picture.svg";
 import { EditorState, AtomicBlockUtils } from "draft-js";
 import Button from "../../../../../../../button";
-import { getImageBlob } from "../../../../duck/utils";
+import { getImageInfo } from "../../../../duck/utils";
 import styles from "./InsertImage.module.css";
 
 interface InsertImageType {
@@ -18,19 +18,19 @@ const InsertImage: React.FC<InsertImageType> = ({
 
   const changeFileHandler = () => {
     if (inputRef.current) {
-      getImageBlob(inputRef.current).then((content) => {
+      getImageInfo(inputRef.current).then((blob) => {
         const contentState = editorState.getCurrentContent();
-
         const contentStateWithEntity = contentState.createEntity(
           "IMAGE",
-          "MUTABLE",
-          { src: content }
+          "IMMUTABLE",
+          { src: blob }
         );
 
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
-        const newEditorState = EditorState.createWithContent(
-          contentStateWithEntity
-        );
+
+        const newEditorState = EditorState.set(editorState, {
+          currentContent: contentStateWithEntity,
+        });
 
         setEditorState(
           AtomicBlockUtils.insertAtomicBlock(newEditorState, entityKey, " ")
