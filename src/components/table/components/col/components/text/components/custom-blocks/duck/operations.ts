@@ -1,16 +1,16 @@
 import { EditorState } from "draft-js";
 
-export const changeImageSize = (
+export const changeBlockData = (
   editorState: EditorState,
   blockKey: string,
-  size: { width: number; height: number }
+  data: any
 ) => {
   const contentState = editorState.getCurrentContent();
   const block = contentState.getBlockForKey(blockKey);
   const entityAt = block.getEntityAt(0);
 
   const newContent = contentState.mergeEntityData(entityAt, {
-    ...size,
+    ...data,
   });
 
   return EditorState.push(editorState, newContent, "change-block-data");

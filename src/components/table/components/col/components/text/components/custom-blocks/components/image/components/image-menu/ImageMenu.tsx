@@ -1,5 +1,5 @@
 import React from "react";
-import { Remove, ChangeSize } from "./components";
+import { Remove, ChangeSize, Link } from "./components";
 import styles from "./ImageMenu.module.css";
 
 interface ImageMenuType {
@@ -10,6 +10,7 @@ const ImageMenu: React.FC<ImageMenuType> = ({ blockKey }) => (
   <div className={styles.wrapper}>
     <Remove blockKey={blockKey} />
     <ChangeSize blockKey={blockKey} />
+    <Link blockKey={blockKey} />
   </div>
 );
 

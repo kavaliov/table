@@ -3,7 +3,7 @@ import { EditorState } from "draft-js";
 import OutsideClickHandler from "react-outside-click-handler";
 import Button from "../../../../../../../../../../../button";
 import { TextContext } from "../../../../../../../../duck/context";
-import { changeImageSize } from "./duck/operations";
+import { changeBlockData } from "../../../../../../duck/operations";
 import icon from "./crop.svg";
 import styles from "./ChangeSize.module.css";
 
@@ -48,7 +48,7 @@ const ChangeSize: React.FC<ChangeSizeType> = ({ blockKey }) => {
   const changeSizeHandler = () => {
     setEditMode(true);
     setOpened(false);
-    const newEditorState = changeImageSize(editorState, blockKey, size);
+    const newEditorState = changeBlockData(editorState, blockKey, size);
     setEditorState(
       EditorState.forceSelection(newEditorState, newEditorState.getSelection())
     );

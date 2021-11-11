@@ -15,7 +15,9 @@ interface LinkType {
 }
 
 const Link: React.FC<LinkType> = ({ href, children }) => (
-  <a href={href}>{children}</a>
+  <a target="_blank" href={href}>
+    {children}
+  </a>
 );
 
 const Image: React.FC<ImageType> = ({ entity, block }) => {
@@ -23,7 +25,7 @@ const Image: React.FC<ImageType> = ({ entity, block }) => {
   const [opened, setOpened] = React.useState(false);
   const { src, width, height, href } = entity.getData();
   const imageRef = useRef<HTMLImageElement>(null);
-  const key = block.getKey();
+  const blockKey = block.getKey();
 
   const clickHandler = () => {
     if (editMode) {
@@ -49,14 +51,14 @@ const Image: React.FC<ImageType> = ({ entity, block }) => {
   return (
     <OutsideClickHandler onOutsideClick={outsideClickHandler}>
       <div className={styles.wrapper}>
-        {href ? (
+        {href && !editMode ? (
           <Link href={href}>
             <Image />
           </Link>
         ) : (
           <Image />
         )}
-        {opened && <ImageMenu blockKey={key} />}
+        {opened && <ImageMenu blockKey={blockKey} />}
       </div>
     </OutsideClickHandler>
   );
