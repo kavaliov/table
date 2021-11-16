@@ -1,6 +1,6 @@
 import React from "react";
 import { ContentBlock, ContentState } from "draft-js";
-import { Image } from "./components";
+import { Image, Katex } from "./components";
 
 interface CustomBlockType {
   contentState: ContentState;
@@ -17,6 +17,10 @@ const CustomBlock: React.FC<CustomBlockType> = ({ contentState, block }) => {
 
     if (type === "IMAGE") {
       return <Image entity={entity} block={block} />;
+    }
+
+    if (type === "KATEX") {
+      return <Katex entity={entity} block={block} />;
     }
   }
 

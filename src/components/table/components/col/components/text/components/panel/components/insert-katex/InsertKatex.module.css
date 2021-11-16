@@ -1,0 +1,56 @@
+.wrapper {
+  display: none;
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 250px;
+  background: white;
+  padding: 10px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.56);
+  border-radius: 4px;
+
+  pre {
+    margin-bottom: 20px;
+    user-select: text;
+  }
+
+  &.opened {
+    display: block;
+  }
+
+  .textarea {
+    -webkit-appearance: none;
+    border: 1px solid #dadada;
+    border-radius: 2px;
+    width: 100%;
+    min-height: 150px;
+    box-sizing: border-box;
+    outline: none;
+    padding: 8px;
+    margin: 8px 0;
+    font-size: 11px;
+    resize: none;
+  }
+
+  .buttons {
+    display: flex;
+
+    & > button {
+      flex: 1;
+      box-shadow: none;
+      border: 1px solid #34a4a0;
+      color: #34a4a0;
+    }
+
+    .insertButton {
+      background: #34a4a0;
+      color: white;
+      margin-left: 10px;
+
+      &:hover {
+        background: #47b3af;
+      }
+    }
+  }
+}

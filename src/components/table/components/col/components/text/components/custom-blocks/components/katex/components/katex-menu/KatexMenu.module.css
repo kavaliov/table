@@ -1,14 +1,16 @@
 .wrapper {
+  position: absolute;
   display: flex;
   justify-content: center;
-  position: absolute;
   background: white;
-  top: 4px;
-  left: 4px;
+  bottom: 0;
   border-radius: 4px;
-  box-shadow: 0 0 5px rgb(0 0 0 / 38%);
+  transform: translateY(calc(100% + 6px));
+  z-index: 30;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.38);
 
-  & > button {
+  & > button,
+  & > select {
     border-radius: 0;
     box-shadow: none;
 

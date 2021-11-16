@@ -1,0 +1,10 @@
+.select {
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  font-size: 12px;
+
+  &:hover {
+    background: #e8f8ff;
+  }
+}

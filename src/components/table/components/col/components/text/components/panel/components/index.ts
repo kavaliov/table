@@ -8,3 +8,4 @@ export { default as AlignRight } from "./align-right";
 export { default as AlignLeft } from "./align-left";
 export { default as AlignCenter } from "./align-center";
 export { default as InsertImage } from "./insert-image";
+export { default as InsertKatex } from "./insert-katex";

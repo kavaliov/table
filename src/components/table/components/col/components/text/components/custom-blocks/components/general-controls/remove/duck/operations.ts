@@ -1,6 +1,9 @@
 import { EditorState, Modifier } from "draft-js";
 
-export const removeImage = (editorState: EditorState, blockKey: string): EditorState => {
+export const removeBlock = (
+  editorState: EditorState,
+  blockKey: string
+): EditorState => {
   const contentState = editorState.getCurrentContent();
   const block = contentState.getBlockForKey(blockKey);
   const before = contentState.getBlockBefore(block.getKey());

@@ -2,18 +2,12 @@ import React from "react";
 import icon from "./picture.svg";
 import { EditorState, AtomicBlockUtils } from "draft-js";
 import Button from "../../../../../../../button";
+import { TextContext } from "../../../../duck/context";
 import { getImageInfo } from "../../../../duck/utils";
 import styles from "./InsertImage.module.css";
 
-interface InsertImageType {
-  editorState: EditorState;
-  setEditorState: React.Dispatch<React.SetStateAction<EditorState>>;
-}
-
-const InsertImage: React.FC<InsertImageType> = ({
-  editorState,
-  setEditorState,
-}) => {
+const InsertImage: React.FC = () => {
+  const { editorState, setEditorState } = React.useContext(TextContext);
   const inputRef = React.useRef<HTMLInputElement>(null);
 
   const changeFileHandler = () => {

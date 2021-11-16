@@ -1,5 +1,6 @@
 import React from "react";
 import "draft-js/dist/Draft.css";
+import "katex/dist/katex.min.css";
 import classNames from "classnames";
 import OutsideClickHandler from "react-outside-click-handler";
 import { TableContext } from "./duck/context";

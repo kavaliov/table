@@ -1,0 +1,1 @@
+export { default as ChangeSize } from "./change-size";

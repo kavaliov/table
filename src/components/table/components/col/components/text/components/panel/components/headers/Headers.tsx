@@ -1,10 +1,9 @@
 import React from "react";
 import { EditorState, RichUtils } from "draft-js";
+import Button from "../../../../../../../button";
 import { HEADERS } from "./duck/constants";
 import { getLabel } from "./duck/utils";
 import styles from "./Headers.module.css";
-import { getBlockType } from "../../../../duck/utils";
-import Button from "../../../../../../../button";
 
 interface HeadersType {
   editorState: EditorState;
@@ -16,7 +15,7 @@ const Headers: React.FC<HeadersType> = ({ editorState, setEditorState }) => {
   const [opened, setOpened] = React.useState(false);
 
   React.useEffect(() => {
-    setType(getBlockType(editorState));
+    setType(RichUtils.getCurrentBlockType(editorState));
   }, [editorState]);
 
   const headerHandler = (value: string) => {

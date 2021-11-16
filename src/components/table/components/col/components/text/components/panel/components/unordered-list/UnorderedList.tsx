@@ -1,7 +1,6 @@
 import React from "react";
 import { EditorState, RichUtils } from "draft-js";
 import Button from "../../../../../../../button";
-import { getBlockType } from "../../../../duck/utils";
 import icon from "./unordered-list.svg";
 
 interface UnorderedListType {
@@ -16,7 +15,7 @@ const UnorderedList: React.FC<UnorderedListType> = ({
   const [unordered, setUnordered] = React.useState(false);
 
   React.useEffect(() => {
-    const blockType = getBlockType(editorState);
+    const blockType = RichUtils.getCurrentBlockType(editorState);
 
     setUnordered(blockType === "unordered-list-item");
   }, [editorState]);

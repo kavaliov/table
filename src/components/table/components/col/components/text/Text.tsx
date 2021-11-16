@@ -80,7 +80,7 @@ const Text: React.FC<TextType> = ({
           <Editor
             blockStyleFn={getBlockStyle}
             blockRendererFn={(block) => {
-              if (block.getType() === "atomic") {
+              if (block.getType().indexOf("atomic") > -1 ) {
                 return {
                   component: CustomBlock,
                   editable: false,

@@ -1,7 +1,6 @@
 import React from "react";
 import { EditorState, RichUtils } from "draft-js";
 import Button from "../../../../../../../button";
-import { getBlockType } from "../../../../duck/utils";
 import icon from "./align-right.svg";
 
 interface AlignRightType {
@@ -16,7 +15,7 @@ const AlignRight: React.FC<AlignRightType> = ({
   const [right, setRight] = React.useState(false);
 
   React.useEffect(() => {
-    const blockType = getBlockType(editorState);
+    const blockType = RichUtils.getCurrentBlockType(editorState);
 
     setRight(blockType === "right");
   }, [editorState]);

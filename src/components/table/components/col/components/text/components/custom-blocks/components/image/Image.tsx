@@ -15,13 +15,15 @@ interface LinkType {
 }
 
 const Link: React.FC<LinkType> = ({ href, children }) => (
-  <a target="_blank" href={href}>
+  <a target="_blank" rel="noreferrer" href={href}>
     {children}
   </a>
 );
 
 const Image: React.FC<ImageType> = ({ entity, block }) => {
-  const { editMode } = React.useContext(TextContext);
+  const { editMode } = React.useContext(
+    TextContext
+  );
   const [opened, setOpened] = React.useState(false);
   const { src, width, height, href } = entity.getData();
   const imageRef = useRef<HTMLImageElement>(null);

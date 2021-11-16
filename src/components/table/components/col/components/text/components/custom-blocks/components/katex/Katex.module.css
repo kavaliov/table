@@ -1,0 +1,41 @@
+.wrapper {
+  position: relative;
+
+  &.size1 {
+    :global(.katex) {
+      font-size: 1.1em;
+    }
+  }
+
+  &.size2 {
+    :global(.katex) {
+      font-size: 1.5em;
+    }
+  }
+
+  &.size3 {
+    :global(.katex) {
+      font-size: 2em;
+    }
+  }
+
+  &.size4 {
+    :global(.katex) {
+      font-size: 2.5em;
+    }
+  }
+
+  &.size5 {
+    :global(.katex) {
+      font-size: 3em;
+    }
+  }
+}
+
+.container {
+  border: 3px solid transparent;
+
+  &.selected {
+    box-shadow: 0 0 0 3px #34a4a0;
+  }
+}

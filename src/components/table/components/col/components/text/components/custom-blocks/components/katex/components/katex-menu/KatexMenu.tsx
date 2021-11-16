@@ -1,20 +1,19 @@
 import React from "react";
 import { Remove, FloatLeft, FloatRight } from "../../../general-controls";
-import { ChangeSize, Link } from "./components";
-import styles from "./ImageMenu.module.css";
+import { ChangeSize } from "./components";
+import styles from "./KatexMenu.module.css";
 
-interface ImageMenuType {
+interface KatexMenuProps {
   blockKey: string;
 }
 
-const ImageMenu: React.FC<ImageMenuType> = ({ blockKey }) => (
+const KatexMenu: React.FC<KatexMenuProps> = ({ blockKey }) => (
   <div className={styles.wrapper}>
     <Remove blockKey={blockKey} />
     <ChangeSize blockKey={blockKey} />
-    <Link blockKey={blockKey} />
     <FloatLeft blockKey={blockKey} />
     <FloatRight blockKey={blockKey} />
   </div>
 );
 
-export default ImageMenu;
+export default KatexMenu;

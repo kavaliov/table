@@ -19,7 +19,7 @@ const Link: React.FC<LinkType> = ({ blockKey }) => {
   const contentState = editorState.getCurrentContent();
   const entityKey = contentState.getBlockForKey(blockKey).getEntityAt(0);
   const data = contentState.getEntity(entityKey).getData();
-  const [href, setHref] = React.useState(data.href);
+  const [href, setHref] = React.useState(data.href || "");
 
   React.useEffect(() => {
     if (opened && hrefInputRef.current) {
@@ -58,6 +58,7 @@ const Link: React.FC<LinkType> = ({ blockKey }) => {
       </Button>
       {opened && (
         <div className={styles.wrapper}>
+          <div className={styles.formTitle}>Set Link</div>
           <input
             ref={hrefInputRef}
             value={href}
