@@ -1,7 +1,7 @@
 import React from "react";
 import Button from "../../../../../../../../button";
 import { TextContext } from "../../../../../duck/context";
-import { removeBlock } from "./duck/operations";
+import { removeBlock } from "../../../../../duck/utils";
 import removeIcon from "./delete.svg";
 
 interface RemoveType {

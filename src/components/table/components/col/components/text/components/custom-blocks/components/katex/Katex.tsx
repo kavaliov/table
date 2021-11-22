@@ -10,14 +10,19 @@ import styles from "./Katex.module.css";
 interface KatexProps {
   entity: EntityInstance;
   block: ContentBlock;
+  selected: boolean;
 }
 
-const Katex: React.FC<KatexProps> = ({ entity, block }) => {
+const Katex: React.FC<KatexProps> = ({ entity, block, selected }) => {
   const { editMode } = React.useContext(TextContext);
   const [opened, setOpened] = React.useState(false);
   const { expression, size } = entity.getData();
   const containerRef = React.useRef<HTMLDivElement>(null);
   const blockKey = block.getKey();
+
+  React.useEffect(() => {
+    setOpened(selected);
+  }, [selected]);
 
   React.useEffect(() => {
     if (containerRef.current) {

@@ -1,5 +1,10 @@
 import React from "react";
-import { Remove, FloatLeft, FloatRight } from "../../../general-controls";
+import {
+  Remove,
+  FloatLeft,
+  FloatRight,
+  FloatCenter,
+} from "../../../general-controls";
 import { ChangeSize, Link } from "./components";
 import styles from "./ImageMenu.module.css";
 
@@ -13,6 +18,7 @@ const ImageMenu: React.FC<ImageMenuType> = ({ blockKey }) => (
     <ChangeSize blockKey={blockKey} />
     <Link blockKey={blockKey} />
     <FloatLeft blockKey={blockKey} />
+    <FloatCenter blockKey={blockKey} />
     <FloatRight blockKey={blockKey} />
   </div>
 );

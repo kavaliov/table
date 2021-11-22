@@ -34,4 +34,10 @@
     z-index: 20;
     margin: 0 0 5px 10px;
   }
+
+  :global(.float-center) {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+  }
 }

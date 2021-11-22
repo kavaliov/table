@@ -1,11 +1,21 @@
 import React, { useRef } from "react";
 import classNames from "classnames";
 import OutsideClickHandler from "react-outside-click-handler";
-import { Editor, EditorState, convertToRaw, convertFromRaw } from "draft-js";
+import {
+  Editor,
+  EditorState,
+  convertToRaw,
+  convertFromRaw,
+  DraftHandleValue,
+} from "draft-js";
 import { rowsStateActions } from "../../../../duck/actions";
 import { TableContext } from "../../../../duck/context";
-import { getBlockStyle } from "./duck/utils";
 import { Panel, CustomBlock } from "./components";
+import {
+  getBeforeBlock,
+  getBlockStyle,
+  removeBlock,
+} from "./duck/utils";
 import { TextContext } from "./duck/context";
 import styles from "./Text.module.css";
 
@@ -60,6 +70,25 @@ const Text: React.FC<TextType> = ({
     }
   };
 
+  const handleKeyCommand = (command: string): DraftHandleValue => {
+    if (command === "backspace") {
+      const beforeBlock = getBeforeBlock(editorState);
+      const selection = editorState.getSelection();
+
+      if (
+        beforeBlock &&
+        beforeBlock.getType().indexOf("atomic") > -1 &&
+        !selection.getEndOffset()
+      ) {
+        setEditorState(removeBlock(editorState, beforeBlock.getKey()));
+
+        return "handled";
+      }
+    }
+
+    return "not-handled";
+  };
+
   return (
     <TextContext.Provider
       value={{
@@ -80,7 +109,7 @@ const Text: React.FC<TextType> = ({
           <Editor
             blockStyleFn={getBlockStyle}
             blockRendererFn={(block) => {
-              if (block.getType().indexOf("atomic") > -1 ) {
+              if (block.getType().indexOf("atomic") > -1) {
                 return {
                   component: CustomBlock,
                   editable: false,
@@ -92,6 +121,7 @@ const Text: React.FC<TextType> = ({
             readOnly={!editMode}
             editorState={editorState}
             onChange={setEditorState}
+            handleKeyCommand={handleKeyCommand}
             ref={editorRef}
           />
         </OutsideClickHandler>

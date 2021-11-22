@@ -1,4 +1,11 @@
-import { ContentBlock, EditorState, SelectionState, Modifier } from "draft-js";
+import {
+  ContentBlock,
+  EditorState,
+  SelectionState,
+  ContentState,
+  Modifier,
+  genKey,
+} from "draft-js";
 
 export const getBlockStyle = (block: ContentBlock): string => {
   const type = block.getType();
@@ -22,6 +29,10 @@ export const getBlockStyle = (block: ContentBlock): string => {
 
   if (type.indexOf("floatRight") > -1) {
     className = `${className} float-right`;
+  }
+
+  if (type.indexOf("floatCenter") > -1) {
+    className = `${className} float-center`;
   }
 
   return className;
@@ -71,3 +82,102 @@ export const setAtomicBlockType = (
     Modifier.setBlockType(editorState.getCurrentContent(), selection, type),
     "change-block-type"
   );
+
+export const getNextBlock = (editorState: EditorState): ContentBlock | null => {
+  const contentState = editorState.getCurrentContent();
+  const selection = editorState.getSelection();
+  const anchorKey = selection.getAnchorKey();
+  const focusKey = selection.getFocusKey();
+
+  // single line selection
+  if (anchorKey === focusKey) {
+    const after = contentState.getBlockAfter(anchorKey);
+
+    if (after) {
+      return after;
+    }
+  }
+
+  return null;
+};
+
+export const getBeforeBlock = (
+  editorState: EditorState
+): ContentBlock | null => {
+  const contentState = editorState.getCurrentContent();
+  const selection = editorState.getSelection();
+  const anchorKey = selection.getAnchorKey();
+  const focusKey = selection.getFocusKey();
+
+  // single line selection
+  if (anchorKey === focusKey) {
+    const before = contentState.getBlockBefore(anchorKey);
+
+    if (before) {
+      return before;
+    }
+  }
+
+  return null;
+};
+
+export const addEmptyBlock = (editorState: EditorState, blockKey: string) => {
+  const contentState = editorState.getCurrentContent();
+
+  const newBlock = new ContentBlock({
+    key: genKey(),
+    type: "unstyled",
+    text: "",
+  });
+  const newBlockMap = contentState
+    .getBlockMap()
+    .set(newBlock.getKey(), newBlock);
+
+  return EditorState.push(
+    editorState,
+    ContentState.createFromBlockArray(newBlockMap.toArray()),
+    "split-block"
+  );
+};
+
+export const removeBlock = (
+  editorState: EditorState,
+  blockKey: string
+): EditorState => {
+  const contentState = editorState.getCurrentContent();
+  const block = contentState.getBlockForKey(blockKey);
+  const before = contentState.getBlockBefore(block.getKey());
+  const after = contentState.getBlockAfter(block.getKey());
+  const selection = editorState.getSelection();
+
+  const selectionOfAtomicBlock = selection.merge({
+    anchorKey: before ? before.getKey() : blockKey,
+    anchorOffset: 0,
+    focusKey: after ? after.getKey() : blockKey,
+    focusOffset: 0,
+  });
+
+  const contentStateWithoutEntity = Modifier.applyEntity(
+    contentState,
+    selectionOfAtomicBlock,
+    null
+  );
+
+  const editorStateWithoutEntity = EditorState.push(
+    editorState,
+    contentStateWithoutEntity,
+    "apply-entity"
+  );
+
+  const contentStateWithoutBlock = Modifier.removeRange(
+    contentStateWithoutEntity,
+    selectionOfAtomicBlock,
+    "backward"
+  );
+
+  return EditorState.push(
+    editorStateWithoutEntity,
+    contentStateWithoutBlock,
+    "remove-range"
+  );
+};

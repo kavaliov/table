@@ -8,6 +8,7 @@ import styles from "./Image.module.css";
 interface ImageType {
   entity: EntityInstance;
   block: ContentBlock;
+  selected: boolean;
 }
 
 interface LinkType {
@@ -20,14 +21,16 @@ const Link: React.FC<LinkType> = ({ href, children }) => (
   </a>
 );
 
-const Image: React.FC<ImageType> = ({ entity, block }) => {
-  const { editMode } = React.useContext(
-    TextContext
-  );
-  const [opened, setOpened] = React.useState(false);
+const Image: React.FC<ImageType> = ({ entity, block, selected }) => {
+  const { editMode } = React.useContext(TextContext);
+  const [opened, setOpened] = React.useState(selected);
   const { src, width, height, href } = entity.getData();
   const imageRef = useRef<HTMLImageElement>(null);
   const blockKey = block.getKey();
+
+  React.useEffect(() => {
+    setOpened(selected);
+  }, [selected]);
 
   const clickHandler = () => {
     if (editMode) {
