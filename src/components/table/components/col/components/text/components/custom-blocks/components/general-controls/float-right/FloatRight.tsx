@@ -1,12 +1,8 @@
 import React from "react";
-import { EditorState } from "draft-js";
 import Button from "../../../../../../../../button";
 import { TextContext } from "../../../../../duck/context";
-import {
-  createAtomicSelection,
-  getBlockTypeByKey,
-  setAtomicBlockType,
-} from "../../../../../duck/utils";
+import { getBlockTypeByKey } from "../../../../../duck/utils";
+import { changeAtomicFloating } from "../duck/operations";
 import icon from "./pic-right.svg";
 
 interface FloatRightType {
@@ -23,25 +19,12 @@ const FloatRight: React.FC<FloatRightType> = ({ blockKey }) => {
   }, [editorState, blockKey]);
 
   const clickHandler = () => {
-    if (!alignRight) {
-      const oldSelection = editorState.getSelection();
-      const newSelection = createAtomicSelection(editorState, blockKey);
-      const newEditorState = EditorState.acceptSelection(
-        editorState,
-        newSelection
-      );
-
-      setEditorState(
-        setAtomicBlockType(
-          newEditorState,
-          newEditorState.getSelection(),
-          "atomic floatRight"
-        )
-      );
-      setEditorState((prevEditorState: EditorState) =>
-        EditorState.acceptSelection(prevEditorState, oldSelection)
-      );
-    }
+    changeAtomicFloating(
+      editorState,
+      setEditorState,
+      blockKey,
+      `atomic ${!alignRight && "floatRight"}`
+    );
   };
 
   return (

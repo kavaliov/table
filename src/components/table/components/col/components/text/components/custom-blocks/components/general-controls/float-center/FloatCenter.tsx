@@ -1,12 +1,8 @@
 import React from "react";
-import { EditorState } from "draft-js";
 import Button from "../../../../../../../../button";
 import { TextContext } from "../../../../../duck/context";
-import {
-  createAtomicSelection,
-  getBlockTypeByKey,
-  setAtomicBlockType,
-} from "../../../../../duck/utils";
+import { getBlockTypeByKey } from "../../../../../duck/utils";
+import { changeAtomicFloating } from "../duck/operations";
 import icon from "./pic-center.svg";
 
 interface FloatLeftType {
@@ -23,26 +19,12 @@ const FloatLeft: React.FC<FloatLeftType> = ({ blockKey }) => {
   }, [editorState, blockKey]);
 
   const clickHandler = () => {
-    if (!alignCenter) {
-      const oldSelection = editorState.getSelection();
-      const newSelection = createAtomicSelection(editorState, blockKey);
-      const newEditorState = EditorState.acceptSelection(
-        editorState,
-        newSelection
-      );
-
-      setEditorState(
-        setAtomicBlockType(
-          newEditorState,
-          newEditorState.getSelection(),
-          "atomic floatCenter"
-        )
-      );
-
-      setEditorState((prevEditorState: EditorState) =>
-        EditorState.acceptSelection(prevEditorState, oldSelection)
-      );
-    }
+    changeAtomicFloating(
+      editorState,
+      setEditorState,
+      blockKey,
+      `atomic ${!alignCenter && "floatCenter"}`
+    );
   };
 
   return (
