@@ -38,7 +38,6 @@ const Headers: React.FC<HeadersType> = ({ editorState, setEditorState }) => {
         <ul className={styles.list}>
           <li>
             <button
-              value="unstyled"
               onMouseDown={(e) => e.preventDefault()}
               onClick={() => headerHandler("unstyled")}
               className={styles.header}

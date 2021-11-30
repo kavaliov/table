@@ -11,12 +11,9 @@ import {
 import { rowsStateActions } from "../../../../duck/actions";
 import { TableContext } from "../../../../duck/context";
 import { Panel, CustomBlock } from "./components";
-import {
-  getBeforeBlock,
-  getBlockStyle,
-  removeBlock,
-} from "./duck/utils";
+import { getBeforeBlock, getBlockStyle, removeBlock } from "./duck/utils";
 import { TextContext } from "./duck/context";
+import { customStyleMap } from "./duck/constants";
 import styles from "./Text.module.css";
 
 interface TextType {
@@ -122,6 +119,7 @@ const Text: React.FC<TextType> = ({
             editorState={editorState}
             onChange={setEditorState}
             handleKeyCommand={handleKeyCommand}
+            customStyleMap={customStyleMap}
             ref={editorRef}
           />
         </OutsideClickHandler>
