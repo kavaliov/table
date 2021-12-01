@@ -181,3 +181,19 @@ export const removeBlock = (
     "remove-range"
   );
 };
+
+export const getCurrentStyle = (
+  editorState: EditorState,
+  style: string
+): string[] => {
+  const inlineStyle = editorState.getCurrentInlineStyle();
+  const stylesArray = inlineStyle.toJS();
+
+  return stylesArray.reduce((acc: string[], current: string) => {
+    if (current.indexOf(style) > -1) {
+      acc.push(current);
+    }
+
+    return acc;
+  }, []);
+};

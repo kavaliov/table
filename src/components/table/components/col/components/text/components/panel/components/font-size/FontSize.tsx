@@ -2,8 +2,8 @@ import React from "react";
 import { RichUtils } from "draft-js";
 import Button from "../../../../../../../button";
 import { TextContext } from "../../../../duck/context";
+import { getCurrentStyle } from "../../../../duck/utils";
 import { FONT_SIZES } from "./duck/constants";
-import { getFontSize } from "./duck/utils";
 import styles from "./FontSize.module.css";
 
 const FontSize: React.FC = () => {
@@ -12,7 +12,7 @@ const FontSize: React.FC = () => {
   const [opened, setOpened] = React.useState(false);
 
   React.useEffect(() => {
-    const currentFontSize = getFontSize(editorState)[0];
+    const currentFontSize = getCurrentStyle(editorState, "FONT_SIZE")[0];
     if (currentFontSize) {
       const font = FONT_SIZES.find((size) => size.value === currentFontSize);
       setFontSize(font?.label || "");
@@ -23,7 +23,7 @@ const FontSize: React.FC = () => {
     label: string;
     value: string;
   }): void => {
-    const currentFontSize = getFontSize(editorState)[0];
+    const currentFontSize = getCurrentStyle(editorState, "FONT_SIZE")[0];
 
     const newState = RichUtils.toggleInlineStyle(
       currentFontSize

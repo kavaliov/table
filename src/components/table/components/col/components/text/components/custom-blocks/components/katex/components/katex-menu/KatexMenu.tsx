@@ -1,5 +1,5 @@
 import React from "react";
-import { Remove, FloatLeft, FloatRight } from "../../../general-controls";
+import { Remove, FloatLeft, FloatRight, FloatCenter } from "../../../general-controls";
 import { ChangeSize } from "./components";
 import styles from "./KatexMenu.module.css";
 
@@ -12,6 +12,7 @@ const KatexMenu: React.FC<KatexMenuProps> = ({ blockKey }) => (
     <Remove blockKey={blockKey} />
     <ChangeSize blockKey={blockKey} />
     <FloatLeft blockKey={blockKey} />
+    <FloatCenter blockKey={blockKey} />
     <FloatRight blockKey={blockKey} />
   </div>
 );

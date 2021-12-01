@@ -5,6 +5,7 @@ export { default as UnorderedList } from "./unordered-list";
 export { default as OrderedList } from "./ordered-list";
 export { default as Headers } from "./headers";
 export { default as FontSize } from "./font-size";
+export { default as Colors } from "./colors";
 export { default as AlignRight } from "./align-right";
 export { default as AlignLeft } from "./align-left";
 export { default as AlignCenter } from "./align-center";

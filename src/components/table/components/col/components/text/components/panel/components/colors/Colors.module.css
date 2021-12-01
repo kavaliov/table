@@ -1,0 +1,43 @@
+.wrapper {
+  display: flex;
+  position: relative;
+  align-items: center;
+  justify-content: center;
+}
+
+.colorButton {
+  width: 20px;
+  height: 20px;
+  border: 0;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all ease 0.2s;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+}
+
+.opener {
+  margin-right: 2px !important;
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: white;
+  border-radius: 2px;
+  margin-top: 2px;
+  box-shadow: 0 -4px 10px rgb(0 0 0 / 10%);
+  justify-content: center;
+  align-items: center;
+  padding: 8px 8px 4px 8px;
+
+  button.colorButton {
+    margin: 0 0 4px;
+  }
+}

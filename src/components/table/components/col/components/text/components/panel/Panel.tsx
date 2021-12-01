@@ -8,6 +8,7 @@ import {
   OrderedList,
   Headers,
   FontSize,
+  Colors,
   AlignRight,
   AlignLeft,
   AlignCenter,
@@ -29,6 +30,8 @@ const Panel: React.FC<PanelType> = ({ editorState, setEditorState }) => (
     <div className={styles.separator} />
     <FontSize />
     <div className={styles.separator} />
+    <Colors />
+    <div className={styles.separator} />
     <AlignLeft editorState={editorState} setEditorState={setEditorState} />
     <AlignCenter editorState={editorState} setEditorState={setEditorState} />
     <AlignRight editorState={editorState} setEditorState={setEditorState} />
@@ -38,8 +41,6 @@ const Panel: React.FC<PanelType> = ({ editorState, setEditorState }) => (
     <div className={styles.separator} />
     <InsertImage />
     <InsertKatex />
-    <div className={styles.separator} />
-    <Headers editorState={editorState} setEditorState={setEditorState} />
   </div>
 );
 
