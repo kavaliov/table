@@ -1,0 +1,23 @@
+.wrapper {
+  position: absolute;
+  right: 4px;
+  bottom: 4px;
+
+  button {
+    img {
+      width: 12px;
+    }
+  }
+
+  .answerWrapper {
+    position: absolute;
+    right: 0;
+    bottom: 5px;
+    transform: translateY(-100%);
+    background: whitesmoke;
+    border-radius: 4px;
+    padding: 5px;
+    white-space: nowrap;
+    z-index: 100;
+  }
+}

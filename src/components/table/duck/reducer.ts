@@ -1,13 +1,29 @@
 import { ActionType, createReducer } from "typesafe-actions";
 import { omit } from "lodash-es";
-import { initialRowsState, initialTableState } from "./state";
-import { rowsStateActions, tableStateActions } from "./actions";
+import {
+  initialRowsState,
+  initialTableState,
+  initialAnswersState,
+} from "./state";
+import {
+  rowsStateActions,
+  tableStateActions,
+  answersStateActions,
+} from "./actions";
 import * as Types from "./types";
-import { ColType, PositionStateType, RowType, SelectedColsType } from "./types";
+import {
+  Answer,
+  AnswersState,
+  ColType,
+  PositionStateType,
+  RowType,
+  SelectedColsType,
+} from "./types";
 import { belongs, getRange } from "./utils";
 
 type TableStateAction = ActionType<typeof tableStateActions>;
 type RowsStateAction = ActionType<typeof rowsStateActions>;
+type AnswersStateAction = ActionType<typeof answersStateActions>;
 
 export const tableStateReducer = createReducer<
   Types.TableState,
@@ -410,3 +426,64 @@ export const rowsStateReducer = createReducer<Types.RowsState, RowsStateAction>(
       };
     });
   });
+
+export const answersStateReducer = createReducer<
+  Types.AnswersState,
+  AnswersStateAction
+>(initialAnswersState)
+  .handleAction(
+    answersStateActions.setStudentAnswer,
+    (state: AnswersState, { payload: { rowId, colId, answer } }) => {
+      let updated = false;
+      const newState: AnswersState = state.map((stateStudentAnswer) => {
+        if (
+          stateStudentAnswer.rowId === rowId &&
+          stateStudentAnswer.colId === colId
+        ) {
+          updated = true;
+          return { ...stateStudentAnswer, studentAnswer: answer };
+        } else {
+          return stateStudentAnswer;
+        }
+      });
+
+      if (!updated) {
+        newState.push({
+          rowId,
+          colId,
+          studentAnswer: answer,
+          teacherAnswer: "",
+        });
+      }
+
+      return newState;
+    }
+  )
+  .handleAction(
+    answersStateActions.setTeacherAnswer,
+    (state: Answer[], { payload: { rowId, colId, answer } }) => {
+      let updated = false;
+      const newState: AnswersState = state.map((stateTeacherAnswer) => {
+        if (
+          stateTeacherAnswer.rowId === rowId &&
+          stateTeacherAnswer.colId === colId
+        ) {
+          updated = true;
+          return { ...stateTeacherAnswer, teacherAnswer: answer };
+        } else {
+          return stateTeacherAnswer;
+        }
+      });
+
+      if (!updated) {
+        newState.push({
+          rowId,
+          colId,
+          studentAnswer: "",
+          teacherAnswer: answer,
+        });
+      }
+
+      return newState;
+    }
+  );

@@ -6,7 +6,6 @@ import {
   Underline,
   UnorderedList,
   OrderedList,
-  Headers,
   FontSize,
   Colors,
   AlignRight,

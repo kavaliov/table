@@ -62,6 +62,18 @@ const removeCol = createStandardAction("TABLE/REMOVE_COL")<{
   colId: number;
 }>();
 
+const setTeacherAnswer = createStandardAction("TABLE/SET_TEACHER_ANSWER")<{
+  rowId: number;
+  colId: number;
+  answer: string;
+}>();
+
+const setStudentAnswer = createStandardAction("TABLE/SET_STUDENT _ANSWER")<{
+  rowId: number;
+  colId: number;
+  answer: string;
+}>();
+
 const tableStateActions = {
   setStartSelection,
   setEndSelection,
@@ -80,4 +92,9 @@ const rowsStateActions = {
   removeCol,
 };
 
-export { tableStateActions, rowsStateActions };
+const answersStateActions = {
+  setTeacherAnswer,
+  setStudentAnswer
+};
+
+export { tableStateActions, rowsStateActions, answersStateActions };

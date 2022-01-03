@@ -2,16 +2,24 @@ import React from "react";
 import classNames from "classnames";
 import OutsideClickHandler from "react-outside-click-handler";
 import { TableContext } from "../../duck/context";
+import { isSingleSelection, getCol } from "../../duck/utils";
 import Button from "../button";
 import { getMenuPosition, PositionType } from "./duck/utils";
-import { Merge, ChangeBackground, Unmerge, ChangeType } from "./components";
+import {
+  Merge,
+  ChangeBackground,
+  Unmerge,
+  ChangeType,
+  SetAnswer,
+} from "./components";
 import icon from "./assets/setting.svg";
 import styles from "./SelectionMenu.module.css";
 
 const SelectionMenu: React.FC = () => {
-  const { tableState } = React.useContext(TableContext);
+  const { tableState, rowsState } = React.useContext(TableContext);
   const [position, setPosition] = React.useState<PositionType>();
   const [opened, setOpened] = React.useState<boolean>(false);
+  const [selectedType, setSelectedType] = React.useState<string>("");
 
   React.useEffect(() => {
     if (tableState.selectionState.start && tableState.selectionState.end) {
@@ -22,7 +30,14 @@ const SelectionMenu: React.FC = () => {
         )
       );
     }
-  }, [tableState]);
+
+    if (
+      isSingleSelection(tableState.selectionState) &&
+      tableState.selectionState.start
+    ) {
+      setSelectedType(getCol(rowsState, tableState.selectionState.start).type);
+    }
+  }, [tableState, rowsState]);
 
   const outsideClickHandler = () => {
     if (opened) {
@@ -48,6 +63,10 @@ const SelectionMenu: React.FC = () => {
       {opened && (
         <OutsideClickHandler onOutsideClick={outsideClickHandler}>
           <ul className={styles.menu}>
+            {selectedType === "answer" &&
+              isSingleSelection(tableState.selectionState) && (
+                <SetAnswer setOpened={setOpened} />
+              )}
             <ChangeBackground />
             <ChangeType />
             <Merge />

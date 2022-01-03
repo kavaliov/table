@@ -9,12 +9,18 @@ export interface TableContext {
   dispatchTableState: AnyDispatch;
   rowsState: RowsState;
   dispatchRowsState: AnyDispatch;
+  answersState: AnswersState;
+  dispatchAnswersState: AnyDispatch;
+  builderMode: boolean;
+  teacherMode: boolean;
 }
 
 export interface TableState {
   touched: boolean;
   selectionState: SelectionStateType;
 }
+
+export type AnswersState = Answer[];
 
 export interface SelectionStateType {
   selected: boolean;
@@ -61,4 +67,11 @@ export interface RangeType {
     min: number;
     max: number;
   };
+}
+
+export interface Answer {
+  rowId: number;
+  colId: number;
+  teacherAnswer: string;
+  studentAnswer: string;
 }

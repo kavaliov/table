@@ -1,4 +1,4 @@
-import { TableState, RowsState } from "./types";
+import { TableState, RowsState, AnswersState } from "./types";
 
 export const initialTableState: TableState = {
   touched: false,
@@ -27,3 +27,5 @@ export const initialRowsState: RowsState = [
     ],
   },
 ];
+
+export const initialAnswersState: AnswersState = [];

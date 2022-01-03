@@ -4,13 +4,15 @@ import { ColType as ColDataType, PositionStateType } from "../../duck/types";
 import { TableContext } from "../../duck/context";
 import { tableStateActions } from "../../duck/actions";
 import { belongs } from "../../duck/utils";
-import { Text } from "./components";
+import { Answer, Text } from "./components";
 import styles from "./Col.module.css";
 
 interface ColType {
   colData: ColDataType;
   rowId: number;
 }
+
+const voidHandler = (): void => {};
 
 const Col: React.FC<ColType> = React.memo(({ colData, rowId }) => {
   const [selected, setSelected] = React.useState<boolean>(false);
@@ -19,9 +21,12 @@ const Col: React.FC<ColType> = React.memo(({ colData, rowId }) => {
     rowId: 0,
     colId: 0,
   });
-  const { rowsState, tableState, dispatchTableState } = React.useContext(
-    TableContext
-  );
+  const {
+    rowsState,
+    tableState,
+    dispatchTableState,
+    builderMode,
+  } = React.useContext(TableContext);
 
   React.useEffect(() => {
     if (tableState.selectionState.start && tableState.selectionState.end) {
@@ -111,10 +116,10 @@ const Col: React.FC<ColType> = React.memo(({ colData, rowId }) => {
   return (
     <td
       id={`col-${rowId}-${colData.id}`}
-      onMouseDown={selectStartHandler}
-      onMouseUp={selectEndHandler}
-      onMouseEnter={selectUpdateHandler}
-      onDoubleClick={doubleClickHandler}
+      onMouseDown={builderMode ? selectStartHandler : voidHandler}
+      onMouseUp={builderMode ? selectEndHandler : voidHandler}
+      onMouseEnter={builderMode ? selectUpdateHandler : voidHandler}
+      onDoubleClick={builderMode ? doubleClickHandler : voidHandler}
       colSpan={colData.colSpan}
       rowSpan={colData.rowSpan}
       className={classNames(styles.wrapper, {
@@ -129,7 +134,16 @@ const Col: React.FC<ColType> = React.memo(({ colData, rowId }) => {
           background={colData.background}
           rowId={rowId}
           colId={colData.id}
-          editMode={editMode}
+          editMode={editMode && builderMode}
+          setEditMode={setEditMode}
+        />
+      )}
+      {colData.type === "answer" && (
+        <Answer
+          background={colData.background}
+          rowId={rowId}
+          colId={colData.id}
+          editMode={builderMode ? editMode : true}
           setEditMode={setEditMode}
         />
       )}

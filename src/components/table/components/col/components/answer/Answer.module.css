@@ -1,0 +1,19 @@
+.wrapper {
+  position: relative;
+  padding: 0 !important;
+
+  .answer {
+    width: 100%;
+    box-sizing: border-box;
+    border: 0;
+    height: 100%;
+    outline: none;
+    padding: 8px;
+    resize: none;
+    z-index: 100;
+  }
+
+  .text {
+    padding: 8px;
+  }
+}
