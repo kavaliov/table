@@ -46,15 +46,15 @@
   }
 
   .colorButton {
-    width: 15px;
-    height: 15px;
+    width: 17px;
+    height: 17px;
     border-radius: 50%;
     padding: 0;
     transition: all ease 0.1s;
     border: 1px solid #f1f1f1;
 
     &:hover {
-      transform: scale(1.4);
+      transform: scale(1.3);
     }
   }
 }
