@@ -1,7 +1,7 @@
 import React from "react";
 import { RichUtils, EditorState } from "draft-js";
-import icon from "./bold.svg";
 import Button from "../../../../../../../button";
+import icon from "./bold.svg";
 
 interface BoldType {
   editorState: EditorState;

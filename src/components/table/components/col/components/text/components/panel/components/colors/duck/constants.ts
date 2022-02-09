@@ -10,4 +10,5 @@ export const COLORS = [
   { label: TEXT_COLORS["COLOR_7"], value: "COLOR_7" },
   { label: TEXT_COLORS["COLOR_8"], value: "COLOR_8" },
   { label: TEXT_COLORS["COLOR_9"], value: "COLOR_9" },
+  { label: TEXT_COLORS["COLOR_10"], value: "COLOR_10" },
 ];

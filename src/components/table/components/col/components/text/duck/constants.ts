@@ -8,7 +8,19 @@ export const TEXT_COLORS = {
   COLOR_7: "#4bacc6",
   COLOR_8: "#f79646",
   COLOR_9: "#ffff00",
+  COLOR_10: "#fff",
 };
+
+export const FONT_SIZES = [
+  { label: "9 px", value: "FONT_SIZE_9" },
+  { label: "10 px", value: "FONT_SIZE_10" },
+  { label: "13 px", value: "FONT_SIZE_13" },
+  { label: "14 px", value: "FONT_SIZE_14" },
+  { label: "16 px", value: "FONT_SIZE_16" },
+  { label: "18 px", value: "FONT_SIZE_18" },
+  { label: "21 px", value: "FONT_SIZE_21" },
+  { label: "24 px", value: "FONT_SIZE_24" },
+];
 
 export const customStyleMap = {
   FONT_SIZE_9: {
@@ -61,5 +73,8 @@ export const customStyleMap = {
   },
   COLOR_9: {
     color: TEXT_COLORS["COLOR_9"],
+  },
+  COLOR_10: {
+    color: TEXT_COLORS["COLOR_10"],
   },
 };

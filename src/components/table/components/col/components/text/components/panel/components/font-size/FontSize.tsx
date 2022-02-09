@@ -2,8 +2,8 @@ import React from "react";
 import { RichUtils } from "draft-js";
 import Button from "../../../../../../../button";
 import { TextContext } from "../../../../duck/context";
+import { FONT_SIZES } from "../../../../duck/constants";
 import { getCurrentStyle } from "../../../../duck/utils";
-import { FONT_SIZES } from "./duck/constants";
 import styles from "./FontSize.module.css";
 
 const FontSize: React.FC = () => {

@@ -11,6 +11,7 @@ import {
   Unmerge,
   ChangeType,
   SetAnswer,
+  TextStyle
 } from "./components";
 import icon from "./assets/setting.svg";
 import styles from "./SelectionMenu.module.css";
@@ -67,6 +68,7 @@ const SelectionMenu: React.FC = () => {
               isSingleSelection(tableState.selectionState) && (
                 <SetAnswer setOpened={setOpened} />
               )}
+            <TextStyle />
             <ChangeBackground />
             <ChangeType />
             <Merge />
