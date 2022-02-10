@@ -21,8 +21,7 @@ const ChangeSize: React.FC<ChangeSizeType> = ({ blockKey }) => {
   const entityKey = contentState.getBlockForKey(blockKey).getEntityAt(0);
   const data = contentState.getEntity(entityKey).getData();
   const [size, setSize] = React.useState({
-    width: data.width || 0,
-    height: data.height || 0,
+    width: data.width || 100,
   });
 
   React.useEffect(() => {
@@ -65,26 +64,17 @@ const ChangeSize: React.FC<ChangeSizeType> = ({ blockKey }) => {
           onMouseDown={(e) => {
             e.stopPropagation();
           }}
-          onDoubleClick={(e) => {
-            e.stopPropagation();
-          }}
         >
           <OutsideClickHandler onOutsideClick={closeHandler}>
-            <div className={styles.formTitle}>Change Size (px)</div>
+            <div className={styles.formTitle}>Change Size (%)</div>
             <input
               value={size.width}
               name="width"
               onChange={onChangeHandler}
-              type="number"
               ref={widthInputRef}
               autoComplete="off"
-            />
-            <input
-              value={size.height}
-              name="height"
-              onChange={onChangeHandler}
-              type="number"
-              autoComplete="off"
+              min={1}
+              max={100}
             />
             <div className={styles.buttons}>
               <Button small onClick={closeHandler}>

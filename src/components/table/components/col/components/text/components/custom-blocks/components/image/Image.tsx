@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import ResizeObserver from "resize-observer-polyfill";
 import OutsideClickHandler from "react-outside-click-handler";
 import { EntityInstance, ContentBlock } from "draft-js";
 import { TextContext } from "../../../../duck/context";
@@ -24,7 +25,8 @@ const Link: React.FC<LinkType> = ({ href, children }) => (
 const Image: React.FC<ImageType> = ({ entity, block, selected }) => {
   const { editMode } = React.useContext(TextContext);
   const [opened, setOpened] = React.useState(selected);
-  const { src, width, height, href } = entity.getData();
+  const [htmlWidth, setHtmlWidth] = React.useState(0);
+  const { src, width: percentage, href } = entity.getData();
   const imageRef = useRef<HTMLImageElement>(null);
   const blockKey = block.getKey();
 
@@ -42,6 +44,29 @@ const Image: React.FC<ImageType> = ({ entity, block, selected }) => {
     setOpened(false);
   };
 
+  React.useEffect(() => {
+    const editorContainer = imageRef.current?.closest(
+      "div.DraftEditor-editorContainer"
+    );
+
+    const mutationObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width } = entry.contentRect;
+        setHtmlWidth(width);
+      }
+    });
+
+    if (editorContainer) {
+      mutationObserver.observe(editorContainer as HTMLDivElement);
+    }
+
+    return () => {
+      if (editorContainer) {
+        mutationObserver.unobserve(editorContainer as HTMLDivElement);
+      }
+    };
+  }, []);
+
   const Image = () => (
     <img
       ref={imageRef}
@@ -49,7 +74,7 @@ const Image: React.FC<ImageType> = ({ entity, block, selected }) => {
       alt=""
       onClick={clickHandler}
       className={opened ? styles.opened : ""}
-      style={{ width, height }}
+      style={{ width: htmlWidth * (percentage / 100) }}
     />
   );
 

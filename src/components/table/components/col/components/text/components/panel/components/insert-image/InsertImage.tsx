@@ -17,7 +17,7 @@ const InsertImage: React.FC = () => {
         const contentStateWithEntity = contentState.createEntity(
           "IMAGE",
           "IMMUTABLE",
-          { src: blob }
+          { src: blob, width: 100 }
         );
 
         const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
